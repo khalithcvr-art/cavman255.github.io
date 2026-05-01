@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feeka Cafe - Daily Finance Dashboard</title>
+    <title>Feeka Cafe - Advanced Finance Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
     <style>
@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -44,6 +44,51 @@
         .header p {
             font-size: 1.1em;
             opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .main-content {
@@ -84,6 +129,13 @@
             border-radius: 2px;
         }
 
+        .section h3 {
+            color: #333;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -96,23 +148,35 @@
             font-size: 0.95em;
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1em;
             transition: border-color 0.3s;
+            font-family: inherit;
         }
 
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 15px;
         }
 
@@ -150,9 +214,33 @@
             box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
         }
 
+        .button-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .button-warning:hover {
+            box-shadow: 0 10px 20px rgba(255, 193, 7, 0.3);
+        }
+
+        .button-danger {
+            background: #dc3545;
+        }
+
+        .button-danger:hover {
+            box-shadow: 0 10px 20px rgba(220, 53, 69, 0.3);
+        }
+
         .button-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button-group-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
             margin-top: 20px;
         }
@@ -194,6 +282,10 @@
             color: #dc3545;
         }
 
+        .metric-value.warning {
+            color: #ffc107;
+        }
+
         .chart-container {
             position: relative;
             height: 400px;
@@ -212,11 +304,13 @@
             padding: 12px;
             text-align: left;
             font-weight: 600;
+            font-size: 0.9em;
         }
 
         .data-table td {
             padding: 12px;
             border-bottom: 1px solid #e0e0e0;
+            font-size: 0.9em;
         }
 
         .data-table tr:hover {
@@ -227,7 +321,7 @@
             border-bottom: none;
         }
 
-        .delete-btn {
+        .delete-btn, .edit-btn {
             background: #dc3545;
             color: white;
             border: none;
@@ -235,10 +329,20 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 0.85em;
+            margin-right: 5px;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: #333;
         }
 
         .delete-btn:hover {
             background: #c82333;
+        }
+
+        .edit-btn:hover {
+            background: #e0a800;
         }
 
         .export-section {
@@ -262,57 +366,25 @@
             animation: slideIn 0.3s ease;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 10px;
         }
 
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        .category-breakdown {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .category-item {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-        }
-
-        .category-item h4 {
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .category-item p {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .category-item .amount {
-            font-size: 1.3em;
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             font-weight: bold;
-            color: #667eea;
-            margin-top: 8px;
-        }
-
-        .no-data {
-            text-align: center;
-            color: #999;
-            padding: 30px;
-            font-style: italic;
+            font-size: 0.85em;
+            transition: width 0.3s;
         }
 
         .summary-cards {
@@ -358,18 +430,136 @@
             font-weight: bold;
             margin-top: 5px;
         }
+
+        .no-data {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-style: italic;
+        }
+
+        .staff-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .staff-card h4 {
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .staff-shift {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin: 5px 5px 5px 0;
+        }
+
+        .staff-shift.break {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .goal-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .goal-item.achieved {
+            border-left-color: #28a745;
+            background: #f0fff4;
+        }
+
+        .goal-item h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .goal-item p {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .month-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .month-btn {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .month-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .month-btn:hover {
+            border-color: #667eea;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>☕ Feeka Cafe Daily Finance Dashboard</h1>
-            <p>Track Your Daily Expenses, Sales & Profits in Real-Time</p>
+            <h1>☕ Feeka Cafe - Advanced Finance Dashboard</h1>
+            <p>Complete Business Management System with Analytics & Scheduling</p>
         </div>
 
-        <div class="main-content">
-            <!-- LEFT COLUMN: INPUT FORMS -->
-            <div>
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('daily')">📅 Daily Tracker</button>
+            <button class="tab-button" onclick="switchTab('weekly')">📊 Weekly Summary</button>
+            <button class="tab-button" onclick="switchTab('monthly')">📈 Monthly Summary</button>
+            <button class="tab-button" onclick="switchTab('goals')">🎯 Goals & Targets</button>
+            <button class="tab-button" onclick="switchTab('customers')">👥 Customer Tracker</button>
+            <button class="tab-button" onclick="switchTab('staff')">👔 Staff Schedule</button>
+            <button class="tab-button" onclick="switchTab('reports')">📋 Reports</button>
+        </div>
+
+        <!-- TAB 1: DAILY TRACKER -->
+        <div id="daily" class="tab-content active">
+            <div class="main-content">
                 <!-- Daily Entry Form -->
                 <div class="section">
                     <h2>Daily Entry</h2>
@@ -393,8 +583,7 @@
                         </select>
                     </div>
 
-                    <h3 style="color: #667eea; margin-top: 25px; margin-bottom: 15px;">💰 Expenses</h3>
-
+                    <h3 style="color: #667eea;">💰 Expenses</h3>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="foodExpenses">Food Expenses ($)</label>
@@ -417,8 +606,7 @@
                         </div>
                     </div>
 
-                    <h3 style="color: #28a745; margin-top: 25px; margin-bottom: 15px;">📊 Sales</h3>
-
+                    <h3 style="color: #28a745;">📊 Sales</h3>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="foodSales">Food Sales ($)</label>
@@ -449,20 +637,7 @@
                     <button class="button button-success" onclick="addEntry()">✓ Add Daily Entry</button>
                 </div>
 
-                <!-- Export Section -->
-                <div class="section" style="margin-top: 30px;">
-                    <h2>Export Data</h2>
-                    <div class="export-section">
-                        <button class="button button-secondary" onclick="exportToCSV()">📥 Export CSV</button>
-                        <button class="button button-secondary" onclick="exportToExcel()">📊 Export Excel</button>
-                    </div>
-                    <button class="button button-secondary" style="margin-top: 10px;" onclick="clearAllData()">🗑️ Clear All Data</button>
-                </div>
-            </div>
-
-            <!-- RIGHT COLUMN: DASHBOARD & ANALYTICS -->
-            <div>
-                <!-- Summary Cards -->
+                <!-- Today's Summary -->
                 <div class="section">
                     <h2>Today's Summary</h2>
                     <div class="summary-cards">
@@ -483,60 +658,418 @@
                             <div class="value" id="marginToday">0%</div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Charts Section -->
-                <div class="section" style="margin-top: 30px;">
-                    <h2>Sales Analysis</h2>
+                    <h3>Sales Analysis</h3>
                     <div class="chart-container">
                         <canvas id="salesChart"></canvas>
                     </div>
-                </div>
 
-                <div class="section" style="margin-top: 30px;">
-                    <h2>Expense Breakdown</h2>
+                    <h3 style="margin-top: 30px;">Expense Breakdown</h3>
                     <div class="chart-container">
                         <canvas id="expenseChart"></canvas>
                     </div>
                 </div>
+            </div>
 
-                <div class="section" style="margin-top: 30px;">
-                    <h2>Profit Trend</h2>
-                    <div class="chart-container">
-                        <canvas id="profitChart"></canvas>
+            <!-- Daily Data Table -->
+            <div class="section" style="margin: 30px;">
+                <h2>📋 All Daily Entries</h2>
+                <div id="dataTableContainer" class="no-data">No entries yet. Add your first daily record!</div>
+            </div>
+
+            <!-- Export Options -->
+            <div class="section" style="margin: 0 30px 30px 30px;">
+                <h2>Export Data</h2>
+                <div class="export-section">
+                    <button class="button button-secondary" onclick="exportToCSV()">📥 Export CSV</button>
+                    <button class="button button-secondary" onclick="exportToExcel()">📊 Export Excel</button>
+                </div>
+                <button class="button button-danger" style="margin-top: 10px;" onclick="clearAllData()">🗑️ Clear All Data</button>
+            </div>
+        </div>
+
+        <!-- TAB 2: WEEKLY SUMMARY -->
+        <div id="weekly" class="tab-content">
+            <div class="main-content">
+                <div class="section full-width">
+                    <h2>Weekly Summary</h2>
+                    <p style="color: #666; margin-bottom: 20px;">View your performance for the current and past weeks</p>
+
+                    <div class="form-row" style="margin-bottom: 30px;">
+                        <div class="form-group">
+                            <label for="weekSelector">Select Week</label>
+                            <input type="week" id="weekSelector">
+                        </div>
+                        <div style="display: flex; align-items: flex-end;">
+                            <button class="button button-secondary" onclick="loadWeeklyData()">Load Week</button>
+                        </div>
                     </div>
+
+                    <div id="weeklyStats" class="stats-row" style="display: none;">
+                        <div class="metric-card">
+                            <div class="metric-label">Weekly Sales</div>
+                            <div class="metric-value sales" id="weeklySales">$0.00</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Weekly Expenses</div>
+                            <div class="metric-value" id="weeklyExpenses">$0.00</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Weekly Profit</div>
+                            <div class="metric-value profit" id="weeklyProfit">$0.00</div>
+                        </div>
+                    </div>
+
+                    <h3>Week Performance</h3>
+                    <div class="chart-container">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Daily Breakdown</h3>
+                    <div id="weeklyTableContainer" class="no-data">Select a week to view data</div>
                 </div>
             </div>
         </div>
 
-        <!-- Data Table Section -->
-        <div class="section" style="margin: 30px; grid-column: 1 / -1;">
-            <h2>📋 All Entries</h2>
-            <div id="dataTableContainer" class="no-data">No entries yet. Add your first daily record!</div>
+        <!-- TAB 3: MONTHLY SUMMARY -->
+        <div id="monthly" class="tab-content">
+            <div class="main-content">
+                <div class="section full-width">
+                    <h2>Monthly Summary</h2>
+                    <p style="color: #666; margin-bottom: 20px;">Comprehensive overview of your monthly performance</p>
+
+                    <div class="form-row" style="margin-bottom: 30px;">
+                        <div class="form-group">
+                            <label for="monthSelector">Select Month</label>
+                            <input type="month" id="monthSelector">
+                        </div>
+                        <div style="display: flex; align-items: flex-end;">
+                            <button class="button button-secondary" onclick="loadMonthlyData()">Load Month</button>
+                        </div>
+                    </div>
+
+                    <div id="monthlyStats" class="stats-row" style="display: none;">
+                        <div class="metric-card">
+                            <div class="metric-label">Monthly Sales</div>
+                            <div class="metric-value sales" id="monthlySales">$0.00</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Monthly Expenses</div>
+                            <div class="metric-value" id="monthlyExpenses">$0.00</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Monthly Profit</div>
+                            <div class="metric-value profit" id="monthlyProfit">$0.00</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Avg Daily Profit</div>
+                            <div class="metric-value" id="monthlyAvgProfit">$0.00</div>
+                        </div>
+                    </div>
+
+                    <h3>Monthly Trends</h3>
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Category Performance</h3>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Daily Performance</h3>
+                    <div id="monthlyTableContainer" class="no-data">Select a month to view data</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: GOALS & TARGETS -->
+        <div id="goals" class="tab-content">
+            <div class="main-content">
+                <!-- Add Goal Form -->
+                <div class="section">
+                    <h2>Set Goals & Targets</h2>
+
+                    <div class="form-group">
+                        <label for="goalType">Goal Type</label>
+                        <select id="goalType">
+                            <option value="daily-sales">Daily Sales Target</option>
+                            <option value="daily-profit">Daily Profit Target</option>
+                            <option value="monthly-sales">Monthly Sales Target</option>
+                            <option value="monthly-profit">Monthly Profit Target</option>
+                            <option value="expense-limit">Daily Expense Limit</option>
+                            <option value="profit-margin">Profit Margin Target</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="goalTarget">Target Amount ($)</label>
+                            <input type="number" id="goalTarget" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="goalDeadline">Deadline</label>
+                            <input type="date" id="goalDeadline">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goalDescription">Description</label>
+                        <textarea id="goalDescription" placeholder="Add notes about this goal..."></textarea>
+                    </div>
+
+                    <button class="button button-success" onclick="addGoal()">✓ Add Goal</button>
+                </div>
+
+                <!-- Goals List -->
+                <div class="section">
+                    <h2>Active Goals</h2>
+                    <div id="goalsContainer" class="no-data">No goals set yet. Create your first goal!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: CUSTOMER TRACKER -->
+        <div id="customers" class="tab-content">
+            <div class="main-content">
+                <!-- Add Customer Entry -->
+                <div class="section">
+                    <h2>Daily Customer Tracking</h2>
+
+                    <div class="form-group">
+                        <label for="customerDate">📅 Date</label>
+                        <input type="date" id="customerDate">
+                    </div>
+
+                    <h3 style="color: #667eea;">Customer Count</h3>
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label for="morningCustomers">Morning (6am-12pm)</label>
+                            <input type="number" id="morningCustomers" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="afternoonCustomers">Afternoon (12pm-5pm)</label>
+                            <input type="number" id="afternoonCustomers" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="eveningCustomers">Evening (5pm-10pm)</label>
+                            <input type="number" id="eveningCustomers" placeholder="0" min="0">
+                        </div>
+                    </div>
+
+                    <h3 style="color: #667eea; margin-top: 20px;">Customer Types</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newCustomers">New Customers</label>
+                            <input type="number" id="newCustomers" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="regularCustomers">Regular Customers</label>
+                            <input type="number" id="regularCustomers" placeholder="0" min="0">
+                        </div>
+                    </div>
+
+                    <h3 style="color: #667eea; margin-top: 20px;">Customer Feedback</h3>
+                    <div class="form-group">
+                        <label for="customerFeedback">📝 Notes (feedback, complaints, compliments)</label>
+                        <textarea id="customerFeedback" placeholder="Record customer feedback..."></textarea>
+                    </div>
+
+                    <button class="button button-success" onclick="addCustomerData()">✓ Save Customer Data</button>
+                </div>
+
+                <!-- Customer Statistics -->
+                <div class="section">
+                    <h2>Customer Statistics</h2>
+                    <div id="customerStats" class="stats-row" style="margin-bottom: 30px;">
+                        <div class="metric-card">
+                            <div class="metric-label">Total Customers (Today)</div>
+                            <div class="metric-value" id="totalCustomersToday">0</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Peak Time</div>
+                            <div class="metric-value" id="peakTime">-</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Avg Daily Customers</div>
+                            <div class="metric-value" id="avgDailyCustomers">0</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">New vs Regular</div>
+                            <div class="metric-value" id="newVsRegular">-</div>
+                        </div>
+                    </div>
+
+                    <h3>Customer Trends</h3>
+                    <div class="chart-container">
+                        <canvas id="customerChart"></canvas>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Hourly Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="hourlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Data Table -->
+            <div class="section" style="margin: 30px;">
+                <h2>📋 Customer Records</h2>
+                <div id="customerTableContainer" class="no-data">No customer records yet.</div>
+            </div>
+        </div>
+
+        <!-- TAB 6: STAFF SCHEDULE -->
+        <div id="staff" class="tab-content">
+            <div class="main-content">
+                <!-- Add Staff Member -->
+                <div class="section">
+                    <h2>Staff Management</h2>
+
+                    <h3 style="color: #667eea;">Add Staff Member</h3>
+                    <div class="form-group">
+                        <label for="staffName">Staff Name</label>
+                        <input type="text" id="staffName" placeholder="Enter staff name">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="staffPosition">Position</label>
+                            <select id="staffPosition">
+                                <option value="Manager">Manager</option>
+                                <option value="Barista">Barista</option>
+                                <option value="Cashier">Cashier</option>
+                                <option value="Kitchen Staff">Kitchen Staff</option>
+                                <option value="Cleaner">Cleaner</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="staffPhone">Phone</label>
+                            <input type="tel" id="staffPhone" placeholder="Phone number">
+                        </div>
+                    </div>
+
+                    <button class="button button-success" onclick="addStaffMember()">✓ Add Staff Member</button>
+
+                    <h3 style="color: #667eea; margin-top: 30px;">Schedule Shift</h3>
+                    <div class="form-group">
+                        <label for="shiftStaff">Select Staff</label>
+                        <select id="shiftStaff" id="shiftStaff"></select>
+                    </div>
+
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label for="shiftDate">Shift Date</label>
+                            <input type="date" id="shiftDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="shiftStart">Start Time</label>
+                            <input type="time" id="shiftStart">
+                        </div>
+                        <div class="form-group">
+                            <label for="shiftEnd">End Time</label>
+                            <input type="time" id="shiftEnd">
+                        </div>
+                    </div>
+
+                    <button class="button button-success" onclick="addShift()">✓ Schedule Shift</button>
+                </div>
+
+                <!-- Staff List -->
+                <div class="section">
+                    <h2>Current Staff</h2>
+                    <div id="staffContainer" class="no-data">No staff members added yet.</div>
+                </div>
+            </div>
+
+            <!-- Schedule Calendar -->
+            <div class="section" style="margin: 30px;">
+                <h2>📅 Staff Schedule</h2>
+                <div class="form-group" style="max-width: 300px;">
+                    <label for="scheduleMonth">View Schedule for:</label>
+                    <input type="month" id="scheduleMonth">
+                </div>
+                <div id="scheduleContainer" class="no-data">No shifts scheduled yet.</div>
+            </div>
+        </div>
+
+        <!-- TAB 7: REPORTS -->
+        <div id="reports" class="tab-content">
+            <div class="section" style="padding: 40px;">
+                <h2>Reports & Analytics</h2>
+
+                <div class="export-section" style="margin-top: 30px; margin-bottom: 30px;">
+                    <button class="button button-secondary" onclick="generatePDFReport()">📄 Generate PDF Report</button>
+                    <button class="button button-secondary" onclick="exportAllData()">📊 Export All Data</button>
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 20px;">Available Reports</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div class="goal-item">
+                        <h4>Daily Sales Report</h4>
+                        <p>View daily sales trends and performance metrics</p>
+                        <button class="button button-secondary" onclick="downloadDailyReport()">Download</button>
+                    </div>
+                    <div class="goal-item">
+                        <h4>Monthly Financial Report</h4>
+                        <p>Comprehensive monthly profit and loss statement</p>
+                        <button class="button button-secondary" onclick="downloadMonthlyReport()">Download</button>
+                    </div>
+                    <div class="goal-item">
+                        <h4>Customer Analytics</h4>
+                        <p>Customer traffic and demographic insights</p>
+                        <button class="button button-secondary" onclick="downloadCustomerReport()">Download</button>
+                    </div>
+                    <div class="goal-item">
+                        <h4>Staff Performance</h4>
+                        <p>Staff scheduling and performance overview</p>
+                        <button class="button button-secondary" onclick="downloadStaffReport()">Download</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         let entries = [];
-        let salesChart, expenseChart, profitChart;
+        let goals = [];
+        let customerData = [];
+        let staffMembers = [];
+        let staffSchedules = [];
+        let salesChart, expenseChart, weeklyChart, monthlyChart, categoryChart, customerChart, hourlyChart;
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Set today's date
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('entryDate').value = today;
+            document.getElementById('customerDate').value = today;
+            document.getElementById('shiftDate').value = today;
+            document.getElementById('monthSelector').value = new Date().toISOString().slice(0, 7);
+            document.getElementById('scheduleMonth').value = new Date().toISOString().slice(0, 7);
 
-            // Set day name
             const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             document.getElementById('dayName').value = dayNames[new Date().getDay()];
 
-            // Load from localStorage
             loadFromLocalStorage();
-
-            // Initialize charts
             initCharts();
+            updateAllDashboards();
         });
 
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'weekly') {
+                setTimeout(() => loadWeeklyData(), 100);
+            } else if (tabName === 'monthly') {
+                setTimeout(() => loadMonthlyData(), 100);
+            }
+        }
+
+        // ===== DAILY TRACKER =====
         function addEntry() {
             const entry = {
                 date: document.getElementById('entryDate').value,
@@ -559,30 +1092,35 @@
 
             entries.push(entry);
             saveToLocalStorage();
-            updateDashboard();
+            updateAllDashboards();
             clearForm();
 
-            // Show success message
             const msg = document.getElementById('successMessage');
             msg.classList.add('show');
             setTimeout(() => msg.classList.remove('show'), 3000);
         }
 
+        function clearForm() {
+            document.getElementById('foodExpenses').value = '';
+            document.getElementById('dessertExpenses').value = '';
+            document.getElementById('beverageExpenses').value = '';
+            document.getElementById('otherExpenses').value = '';
+            document.getElementById('foodSales').value = '';
+            document.getElementById('dessertSales').value = '';
+            document.getElementById('beverageSales').value = '';
+            document.getElementById('otherSales').value = '';
+            document.getElementById('notes').value = '';
+        }
+
         function deleteEntry(index) {
-            if (confirm('Are you sure you want to delete this entry?')) {
+            if (confirm('Delete this entry?')) {
                 entries.splice(index, 1);
                 saveToLocalStorage();
-                updateDashboard();
+                updateAllDashboards();
             }
         }
 
-        function updateDashboard() {
-            updateSummary();
-            updateTable();
-            updateCharts();
-        }
-
-        function updateSummary() {
+        function updateDailySummary() {
             if (entries.length === 0) {
                 document.getElementById('totalExpensesToday').textContent = '$0.00';
                 document.getElementById('totalSalesToday').textContent = '$0.00';
@@ -602,7 +1140,7 @@
             }
         }
 
-        function updateTable() {
+        function updateDataTable() {
             const container = document.getElementById('dataTableContainer');
 
             if (entries.length === 0) {
@@ -652,6 +1190,370 @@
             container.innerHTML = html;
         }
 
+        // ===== WEEKLY SUMMARY =====
+        function loadWeeklyData() {
+            const weekInput = document.getElementById('weekSelector').value;
+            if (!weekInput) {
+                alert('Please select a week');
+                return;
+            }
+
+            const [year, week] = weekInput.split('W');
+            const weekStart = new Date(year, 0, 1 + (week - 1) * 7);
+            const weekEnd = new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000);
+
+            const weekEntries = entries.filter(e => {
+                const entryDate = new Date(e.date);
+                return entryDate >= weekStart && entryDate <= weekEnd;
+            });
+
+            if (weekEntries.length === 0) {
+                document.getElementById('weeklyStats').style.display = 'none';
+                document.getElementById('weeklyTableContainer').innerHTML = '<div class="no-data">No data for this week</div>';
+                return;
+            }
+
+            const totalSales = weekEntries.reduce((sum, e) => sum + e.totalSales, 0);
+            const totalExpenses = weekEntries.reduce((sum, e) => sum + e.totalExpenses, 0);
+            const totalProfit = totalSales - totalExpenses;
+
+            document.getElementById('weeklySales').textContent = '$' + totalSales.toFixed(2);
+            document.getElementById('weeklyExpenses').textContent = '$' + totalExpenses.toFixed(2);
+            document.getElementById('weeklyProfit').textContent = '$' + totalProfit.toFixed(2);
+            document.getElementById('weeklyStats').style.display = 'grid';
+
+            // Update chart
+            updateWeeklyChart(weekEntries);
+
+            // Update table
+            let html = '<table class="data-table"><thead><tr><th>Date</th><th>Day</th><th>Sales</th><th>Expenses</th><th>Profit</th></tr></thead><tbody>';
+            weekEntries.forEach(e => {
+                html += `<tr><td>${e.date}</td><td>${e.day}</td><td>$${e.totalSales.toFixed(2)}</td><td>$${e.totalExpenses.toFixed(2)}</td><td>$${e.profit.toFixed(2)}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('weeklyTableContainer').innerHTML = html;
+        }
+
+        function updateWeeklyChart(weekEntries) {
+            if (!weeklyChart) return;
+            weeklyChart.data.labels = weekEntries.map(e => e.date);
+            weeklyChart.data.datasets[0].data = weekEntries.map(e => e.totalSales);
+            weeklyChart.data.datasets[1].data = weekEntries.map(e => e.totalExpenses);
+            weeklyChart.data.datasets[2].data = weekEntries.map(e => e.profit);
+            weeklyChart.update();
+        }
+
+        // ===== MONTHLY SUMMARY =====
+        function loadMonthlyData() {
+            const monthInput = document.getElementById('monthSelector').value;
+            if (!monthInput) {
+                alert('Please select a month');
+                return;
+            }
+
+            const [year, month] = monthInput.split('-');
+            const monthEntries = entries.filter(e => e.date.startsWith(monthInput));
+
+            if (monthEntries.length === 0) {
+                document.getElementById('monthlyStats').style.display = 'none';
+                document.getElementById('monthlyTableContainer').innerHTML = '<div class="no-data">No data for this month</div>';
+                return;
+            }
+
+            const totalSales = monthEntries.reduce((sum, e) => sum + e.totalSales, 0);
+            const totalExpenses = monthEntries.reduce((sum, e) => sum + e.totalExpenses, 0);
+            const totalProfit = totalSales - totalExpenses;
+            const avgProfit = totalProfit / monthEntries.length;
+
+            document.getElementById('monthlySales').textContent = '$' + totalSales.toFixed(2);
+            document.getElementById('monthlyExpenses').textContent = '$' + totalExpenses.toFixed(2);
+            document.getElementById('monthlyProfit').textContent = '$' + totalProfit.toFixed(2);
+            document.getElementById('monthlyAvgProfit').textContent = '$' + avgProfit.toFixed(2);
+            document.getElementById('monthlyStats').style.display = 'grid';
+
+            updateMonthlyChart(monthEntries);
+
+            let html = '<table class="data-table"><thead><tr><th>Date</th><th>Day</th><th>Sales</th><th>Expenses</th><th>Profit</th><th>Margin</th></tr></thead><tbody>';
+            monthEntries.forEach(e => {
+                html += `<tr><td>${e.date}</td><td>${e.day}</td><td>$${e.totalSales.toFixed(2)}</td><td>$${e.totalExpenses.toFixed(2)}</td><td>$${e.profit.toFixed(2)}</td><td>${e.marginPercent}%</td></tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('monthlyTableContainer').innerHTML = html;
+        }
+
+        function updateMonthlyChart(monthEntries) {
+            if (!monthlyChart) return;
+            monthlyChart.data.labels = monthEntries.map(e => e.date);
+            monthlyChart.data.datasets[0].data = monthEntries.map(e => e.totalSales);
+            monthlyChart.data.datasets[1].data = monthEntries.map(e => e.totalExpenses);
+            monthlyChart.update();
+
+            // Category chart
+            const categoryData = {
+                food: monthEntries.reduce((sum, e) => sum + e.foodSales, 0),
+                dessert: monthEntries.reduce((sum, e) => sum + e.dessertSales, 0),
+                beverage: monthEntries.reduce((sum, e) => sum + e.beverageSales, 0),
+                other: monthEntries.reduce((sum, e) => sum + e.otherSales, 0)
+            };
+
+            if (categoryChart) {
+                categoryChart.data.datasets[0].data = [categoryData.food, categoryData.dessert, categoryData.beverage, categoryData.other];
+                categoryChart.update();
+            }
+        }
+
+        // ===== GOALS & TARGETS =====
+        function addGoal() {
+            const goal = {
+                id: Date.now(),
+                type: document.getElementById('goalType').value,
+                target: parseFloat(document.getElementById('goalTarget').value),
+                deadline: document.getElementById('goalDeadline').value,
+                description: document.getElementById('goalDescription').value,
+                created: new Date().toISOString().split('T')[0],
+                achieved: false
+            };
+
+            goals.push(goal);
+            saveToLocalStorage();
+            updateGoalsDisplay();
+            document.getElementById('goalTarget').value = '';
+            document.getElementById('goalDeadline').value = '';
+            document.getElementById('goalDescription').value = '';
+        }
+
+        function updateGoalsDisplay() {
+            const container = document.getElementById('goalsContainer');
+            if (goals.length === 0) {
+                container.innerHTML = '<div class="no-data">No goals set yet. Create your first goal!</div>';
+                return;
+            }
+
+            let html = '';
+            goals.forEach((goal, index) => {
+                let progress = 0;
+                let current = 0;
+
+                if (goal.type === 'daily-sales') {
+                    const today = entries.find(e => e.date === new Date().toISOString().split('T')[0]);
+                    current = today ? today.totalSales : 0;
+                } else if (goal.type === 'daily-profit') {
+                    const today = entries.find(e => e.date === new Date().toISOString().split('T')[0]);
+                    current = today ? today.profit : 0;
+                } else if (goal.type === 'monthly-sales') {
+                    const month = new Date().toISOString().slice(0, 7);
+                    current = entries.filter(e => e.date.startsWith(month)).reduce((sum, e) => sum + e.totalSales, 0);
+                }
+
+                progress = (current / goal.target) * 100;
+                const achieved = progress >= 100;
+
+                html += `
+                    <div class="goal-item ${achieved ? 'achieved' : ''}">
+                        <h4>${goal.type.replace('-', ' ').toUpperCase()}</h4>
+                        <p>${goal.description}</p>
+                        <p><strong>Target:</strong> $${goal.target.toFixed(2)} | <strong>Current:</strong> $${current.toFixed(2)} | <strong>Deadline:</strong> ${goal.deadline}</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${Math.min(progress, 100)}%">${Math.min(Math.round(progress), 100)}%</div>
+                        </div>
+                        <button class="delete-btn" style="margin-top: 10px;" onclick="deleteGoal(${index})">Delete Goal</button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function deleteGoal(index) {
+            if (confirm('Delete this goal?')) {
+                goals.splice(index, 1);
+                saveToLocalStorage();
+                updateGoalsDisplay();
+            }
+        }
+
+        // ===== CUSTOMER TRACKER =====
+        function addCustomerData() {
+            const data = {
+                date: document.getElementById('customerDate').value,
+                morning: parseInt(document.getElementById('morningCustomers').value) || 0,
+                afternoon: parseInt(document.getElementById('afternoonCustomers').value) || 0,
+                evening: parseInt(document.getElementById('eveningCustomers').value) || 0,
+                newCustomers: parseInt(document.getElementById('newCustomers').value) || 0,
+                regularCustomers: parseInt(document.getElementById('regularCustomers').value) || 0,
+                feedback: document.getElementById('customerFeedback').value
+            };
+
+            data.total = data.morning + data.afternoon + data.evening;
+
+            customerData.push(data);
+            saveToLocalStorage();
+            updateCustomerDisplay();
+            clearCustomerForm();
+        }
+
+        function clearCustomerForm() {
+            document.getElementById('morningCustomers').value = '';
+            document.getElementById('afternoonCustomers').value = '';
+            document.getElementById('eveningCustomers').value = '';
+            document.getElementById('newCustomers').value = '';
+            document.getElementById('regularCustomers').value = '';
+            document.getElementById('customerFeedback').value = '';
+        }
+
+        function updateCustomerDisplay() {
+            if (customerData.length === 0) return;
+
+            const today = new Date().toISOString().split('T')[0];
+            const todayData = customerData.find(c => c.date === today);
+
+            if (todayData) {
+                document.getElementById('totalCustomersToday').textContent = todayData.total;
+                const peak = Math.max(todayData.morning, todayData.afternoon, todayData.evening);
+                if (peak === todayData.morning) document.getElementById('peakTime').textContent = 'Morning';
+                else if (peak === todayData.afternoon) document.getElementById('peakTime').textContent = 'Afternoon';
+                else document.getElementById('peakTime').textContent = 'Evening';
+            }
+
+            const avgCustomers = (customerData.reduce((sum, c) => sum + c.total, 0) / customerData.length).toFixed(0);
+            document.getElementById('avgDailyCustomers').textContent = avgCustomers;
+
+            const totalNew = customerData.reduce((sum, c) => sum + c.newCustomers, 0);
+            const totalRegular = customerData.reduce((sum, c) => sum + c.regularCustomers, 0);
+            document.getElementById('newVsRegular').textContent = `${totalNew} / ${totalRegular}`;
+
+            updateCustomerCharts();
+
+            // Table
+            let html = '<table class="data-table"><thead><tr><th>Date</th><th>Morning</th><th>Afternoon</th><th>Evening</th><th>Total</th><th>New</th><th>Regular</th></tr></thead><tbody>';
+            customerData.forEach(c => {
+                html += `<tr><td>${c.date}</td><td>${c.morning}</td><td>${c.afternoon}</td><td>${c.evening}</td><td>${c.total}</td><td>${c.newCustomers}</td><td>${c.regularCustomers}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('customerTableContainer').innerHTML = html;
+        }
+
+        function updateCustomerCharts() {
+            if (customerChart) {
+                const last30 = customerData.slice(-30);
+                customerChart.data.labels = last30.map(c => c.date);
+                customerChart.data.datasets[0].data = last30.map(c => c.total);
+                customerChart.update();
+            }
+
+            if (hourlyChart && customerData.length > 0) {
+                const avgMorning = (customerData.reduce((sum, c) => sum + c.morning, 0) / customerData.length).toFixed(0);
+                const avgAfternoon = (customerData.reduce((sum, c) => sum + c.afternoon, 0) / customerData.length).toFixed(0);
+                const avgEvening = (customerData.reduce((sum, c) => sum + c.evening, 0) / customerData.length).toFixed(0);
+
+                hourlyChart.data.datasets[0].data = [avgMorning, avgAfternoon, avgEvening];
+                hourlyChart.update();
+            }
+        }
+
+        // ===== STAFF SCHEDULING =====
+        function addStaffMember() {
+            const staff = {
+                id: Date.now(),
+                name: document.getElementById('staffName').value,
+                position: document.getElementById('staffPosition').value,
+                phone: document.getElementById('staffPhone').value
+            };
+
+            if (!staff.name) {
+                alert('Please enter staff name');
+                return;
+            }
+
+            staffMembers.push(staff);
+            saveToLocalStorage();
+            updateStaffDisplay();
+            updateShiftStaffSelect();
+            document.getElementById('staffName').value = '';
+            document.getElementById('staffPhone').value = '';
+        }
+
+        function addShift() {
+            const staffId = document.getElementById('shiftStaff').value;
+            if (!staffId) {
+                alert('Please select staff member');
+                return;
+            }
+
+            const shift = {
+                id: Date.now(),
+                staffId: parseInt(staffId),
+                date: document.getElementById('shiftDate').value,
+                start: document.getElementById('shiftStart').value,
+                end: document.getElementById('shiftEnd').value
+            };
+
+            staffSchedules.push(shift);
+            saveToLocalStorage();
+            updateScheduleDisplay();
+            document.getElementById('shiftStart').value = '';
+            document.getElementById('shiftEnd').value = '';
+        }
+
+        function updateStaffDisplay() {
+            const container = document.getElementById('staffContainer');
+            if (staffMembers.length === 0) {
+                container.innerHTML = '<div class="no-data">No staff members added yet.</div>';
+                return;
+            }
+
+            let html = '';
+            staffMembers.forEach(staff => {
+                const shifts = staffSchedules.filter(s => s.staffId === staff.id);
+                html += `
+                    <div class="staff-card">
+                        <h4>${staff.name} <span style="font-size: 0.8em; color: #667eea;">${staff.position}</span></h4>
+                        <p>📞 ${staff.phone}</p>
+                        <p style="margin-top: 10px;"><strong>Upcoming Shifts:</strong></p>
+                        <div>
+                            ${shifts.map(s => `<span class="staff-shift">${s.date} ${s.start}-${s.end}</span>`).join('')}
+                            ${shifts.length === 0 ? '<p style="color: #999;">No shifts scheduled</p>' : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateShiftStaffSelect() {
+            const select = document.getElementById('shiftStaff');
+            select.innerHTML = '<option value="">Select Staff Member</option>';
+            staffMembers.forEach(staff => {
+                select.innerHTML += `<option value="${staff.id}">${staff.name}</option>`;
+            });
+        }
+
+        function updateScheduleDisplay() {
+            const container = document.getElementById('scheduleContainer');
+            const monthInput = document.getElementById('scheduleMonth').value;
+
+            if (staffSchedules.length === 0) {
+                container.innerHTML = '<div class="no-data">No shifts scheduled yet.</div>';
+                return;
+            }
+
+            const monthShifts = staffSchedules.filter(s => s.date.startsWith(monthInput));
+            if (monthShifts.length === 0) {
+                container.innerHTML = '<div class="no-data">No shifts for this month.</div>';
+                return;
+            }
+
+            let html = '<table class="data-table"><thead><tr><th>Date</th><th>Staff</th><th>Position</th><th>Time</th></tr></thead><tbody>';
+            monthShifts.forEach(shift => {
+                const staff = staffMembers.find(s => s.id === shift.staffId);
+                html += `<tr><td>${shift.date}</td><td>${staff?.name}</td><td>${staff?.position}</td><td>${shift.start} - ${shift.end}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        // ===== CHARTS =====
         function initCharts() {
             const ctx1 = document.getElementById('salesChart').getContext('2d');
             salesChart = new Chart(ctx1, {
@@ -668,11 +1570,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
+                    plugins: { legend: { position: 'bottom' } }
                 }
             });
 
@@ -698,49 +1596,131 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+                    scales: { y: { beginAtZero: true } }
                 }
             });
 
-            const ctx3 = document.getElementById('profitChart').getContext('2d');
-            profitChart = new Chart(ctx3, {
+            const ctx3 = document.getElementById('weeklyChart').getContext('2d');
+            weeklyChart = new Chart(ctx3, {
                 type: 'line',
                 data: {
                     labels: [],
                     datasets: [{
-                        label: 'Daily Profit',
+                        label: 'Sales',
                         data: [],
                         borderColor: '#28a745',
-                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#28a745'
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)'
+                    }, {
+                        label: 'Expenses',
+                        data: [],
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)'
+                    }, {
+                        label: 'Profit',
+                        data: [],
+                        borderColor: '#ffc107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            const ctx4 = document.getElementById('monthlyChart').getContext('2d');
+            monthlyChart = new Chart(ctx4, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Sales',
+                        data: [],
+                        backgroundColor: '#28a745'
+                    }, {
+                        label: 'Expenses',
+                        data: [],
+                        backgroundColor: '#dc3545'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            const ctx5 = document.getElementById('categoryChart').getContext('2d');
+            categoryChart = new Chart(ctx5, {
+                type: 'pie',
+                data: {
+                    labels: ['Food', 'Dessert', 'Beverage', 'Other'],
+                    datasets: [{
+                        data: [0, 0, 0, 0],
+                        backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+
+            const ctx6 = document.getElementById('customerChart').getContext('2d');
+            customerChart = new Chart(ctx6, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Daily Customers',
+                        data: [],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            const ctx7 = document.getElementById('hourlyChart').getContext('2d');
+            hourlyChart = new Chart(ctx7, {
+                type: 'bar',
+                data: {
+                    labels: ['Morning', 'Afternoon', 'Evening'],
+                    datasets: [{
+                        label: 'Avg Customers',
+                        data: [0, 0, 0],
+                        backgroundColor: ['#667eea', '#764ba2', '#f093fb']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
                 }
             });
         }
 
-        function updateCharts() {
-            if (entries.length === 0) {
-                return;
-            }
+        function updateAllDashboards() {
+            updateDailySummary();
+            updateDataTable();
+            updateGoalsDisplay();
+            updateCustomerDisplay();
+            updateStaffDisplay();
+            updateDailyCharts();
+        }
 
-            // Sales Chart - Total by category
+        function updateDailyCharts() {
+            if (entries.length === 0) return;
+
             const totalFoodSales = entries.reduce((sum, e) => sum + e.foodSales, 0);
             const totalDessertSales = entries.reduce((sum, e) => sum + e.dessertSales, 0);
             const totalBeverageSales = entries.reduce((sum, e) => sum + e.beverageSales, 0);
@@ -749,42 +1729,33 @@
             salesChart.data.datasets[0].data = [totalFoodSales, totalDessertSales, totalBeverageSales, totalOtherSales];
             salesChart.update();
 
-            // Expense Chart - Last 7 days
             const last7 = entries.slice(-7);
             expenseChart.data.labels = last7.map(e => e.date);
             expenseChart.data.datasets[0].data = last7.map(e => e.foodExpenses);
             expenseChart.data.datasets[1].data = last7.map(e => e.dessertExpenses);
             expenseChart.data.datasets[2].data = last7.map(e => e.beverageExpenses);
             expenseChart.update();
-
-            // Profit Chart - All entries
-            profitChart.data.labels = entries.map(e => e.date);
-            profitChart.data.datasets[0].data = entries.map(e => e.profit);
-            profitChart.update();
         }
 
-        function clearForm() {
-            document.getElementById('foodExpenses').value = '';
-            document.getElementById('dessertExpenses').value = '';
-            document.getElementById('beverageExpenses').value = '';
-            document.getElementById('otherExpenses').value = '';
-            document.getElementById('foodSales').value = '';
-            document.getElementById('dessertSales').value = '';
-            document.getElementById('beverageSales').value = '';
-            document.getElementById('otherSales').value = '';
-            document.getElementById('notes').value = '';
-        }
-
+        // ===== EXPORT & STORAGE =====
         function saveToLocalStorage() {
-            localStorage.setItem('feekaCafeData', JSON.stringify(entries));
+            const data = {
+                entries,
+                goals,
+                customerData,
+                staffMembers,
+                staffSchedules
+            };
+            localStorage.setItem('feekaCafeAdvanced', JSON.stringify(data));
         }
 
         function loadFromLocalStorage() {
-            const data = localStorage.getItem('feekaCafeData');
-            if (data) {
-                entries = JSON.parse(data);
-                updateDashboard();
-            }
+            const data = JSON.parse(localStorage.getItem('feekaCafeAdvanced') || '{}');
+            entries = data.entries || [];
+            goals = data.goals || [];
+            customerData = data.customerData || [];
+            staffMembers = data.staffMembers || [];
+            staffSchedules = data.staffSchedules || [];
         }
 
         function exportToCSV() {
@@ -793,10 +1764,9 @@
                 return;
             }
 
-            let csv = 'Date,Day,Food Exp,Dessert Exp,Beverage Exp,Other Exp,Total Exp,Food Sales,Dessert Sales,Beverage Sales,Other Sales,Total Sales,Profit,Margin %,Notes\n';
-
-            entries.forEach(entry => {
-                csv += `${entry.date},${entry.day},${entry.foodExpenses},${entry.dessertExpenses},${entry.beverageExpenses},${entry.otherExpenses},${entry.totalExpenses},${entry.foodSales},${entry.dessertSales},${entry.beverageSales},${entry.otherSales},${entry.totalSales},${entry.profit},${entry.marginPercent},"${entry.notes}"\n`;
+            let csv = 'Date,Day,Food Exp,Dessert Exp,Total Exp,Food Sales,Dessert Sales,Total Sales,Profit,Margin %\n';
+            entries.forEach(e => {
+                csv += `${e.date},${e.day},${e.foodExpenses},${e.dessertExpenses},${e.totalExpenses},${e.foodSales},${e.dessertSales},${e.totalSales},${e.profit},${e.marginPercent}\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -813,36 +1783,123 @@
                 return;
             }
 
-            const data = entries.map(entry => ({
-                'Date': entry.date,
-                'Day': entry.day,
-                'Food Expenses': entry.foodExpenses,
-                'Dessert Expenses': entry.dessertExpenses,
-                'Beverage Expenses': entry.beverageExpenses,
-                'Other Expenses': entry.otherExpenses,
-                'Total Expenses': entry.totalExpenses,
-                'Food Sales': entry.foodSales,
-                'Dessert Sales': entry.dessertSales,
-                'Beverage Sales': entry.beverageSales,
-                'Other Sales': entry.otherSales,
-                'Total Sales': entry.totalSales,
-                'Profit': entry.profit,
-                'Profit Margin %': entry.marginPercent,
-                'Notes': entry.notes
+            const data = entries.map(e => ({
+                'Date': e.date,
+                'Day': e.day,
+                'Food Exp': e.foodExpenses,
+                'Dessert Exp': e.dessertExpenses,
+                'Total Exp': e.totalExpenses,
+                'Food Sales': e.foodSales,
+                'Dessert Sales': e.dessertSales,
+                'Total Sales': e.totalSales,
+                'Profit': e.profit,
+                'Margin %': e.marginPercent
             }));
 
             const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Finance Data');
+            XLSX.utils.book_append_sheet(wb, ws, 'Finance');
             XLSX.writeFile(wb, `Feeka_Cafe_Finance_${new Date().toISOString().split('T')[0]}.xlsx`);
         }
 
+        function exportAllData() {
+            const allData = {
+                entries,
+                goals,
+                customerData,
+                staffMembers,
+                staffSchedules,
+                exportDate: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Feeka_Cafe_Complete_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        function generatePDFReport() {
+            alert('PDF generation requires additional libraries. Please export to Excel and print from there.');
+        }
+
+        function downloadDailyReport() {
+            exportToCSV();
+        }
+
+        function downloadMonthlyReport() {
+            const month = document.getElementById('monthSelector').value;
+            const monthEntries = entries.filter(e => e.date.startsWith(month));
+            if (monthEntries.length === 0) {
+                alert('No data for selected month');
+                return;
+            }
+
+            let csv = 'Monthly Financial Report\n';
+            csv += `Month: ${month}\n\n`;
+            csv += 'Date,Sales,Expenses,Profit\n';
+            monthEntries.forEach(e => {
+                csv += `${e.date},${e.totalSales},${e.totalExpenses},${e.profit}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Monthly_Report_${month}.csv`;
+            a.click();
+        }
+
+        function downloadCustomerReport() {
+            if (customerData.length === 0) {
+                alert('No customer data');
+                return;
+            }
+
+            let csv = 'Date,Morning,Afternoon,Evening,Total,New,Regular\n';
+            customerData.forEach(c => {
+                csv += `${c.date},${c.morning},${c.afternoon},${c.evening},${c.total},${c.newCustomers},${c.regularCustomers}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Customer_Report_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        function downloadStaffReport() {
+            if (staffMembers.length === 0) {
+                alert('No staff data');
+                return;
+            }
+
+            let csv = 'Name,Position,Phone,Scheduled Shifts\n';
+            staffMembers.forEach(staff => {
+                const shifts = staffSchedules.filter(s => s.staffId === staff.id).length;
+                csv += `${staff.name},${staff.position},${staff.phone},${shifts}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Staff_Report_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
         function clearAllData() {
-            if (confirm('Are you sure you want to delete ALL data? This cannot be undone!')) {
+            if (confirm('DELETE ALL DATA? This cannot be undone!')) {
                 entries = [];
+                goals = [];
+                customerData = [];
+                staffMembers = [];
+                staffSchedules = [];
                 saveToLocalStorage();
-                updateDashboard();
-                alert('All data has been cleared!');
+                updateAllDashboards();
+                alert('All data cleared!');
             }
         }
     </script>
