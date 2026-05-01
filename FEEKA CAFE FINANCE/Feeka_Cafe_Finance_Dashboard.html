@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c1a 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -28,7 +28,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c1a 100%);
             color: white;
             padding: 40px 30px;
             text-align: center;
@@ -82,7 +82,7 @@
             font-size: 1.4em;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid #2d5016;
         }
 
         .kpi-grid {
@@ -97,7 +97,7 @@
             border-radius: 12px;
             padding: 25px;
             text-align: center;
-            border-left: 5px solid #667eea;
+            border-left: 5px solid #2d5016;
             transition: all 0.3s;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
@@ -108,9 +108,9 @@
         }
 
         .kpi-card.total {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c1a 100%);
             color: white;
-            border-left: 5px solid #667eea;
+            border-left: 5px solid #2d5016;
         }
 
         .kpi-card.profit {
@@ -150,6 +150,135 @@
             color: white;
         }
 
+        /* FEEKA ORDER Section */
+        .feeka-order-section {
+            background: linear-gradient(135deg, #f0f8e8 0%, #e8f4e0 100%);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-left: 5px solid #2d5016;
+            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.15);
+        }
+
+        .feeka-order-section h2 {
+            color: #2d5016;
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .order-input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .order-search-input {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1em;
+            border: 2px solid #2d5016;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .order-search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #2d5016;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-result-item:hover {
+            background: #f0f8e8;
+            padding-left: 20px;
+        }
+
+        .search-result-item.selected {
+            background: #2d5016;
+            color: white;
+        }
+
+        .result-name {
+            font-weight: 600;
+        }
+
+        .result-price {
+            color: #2d5016;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .search-result-item.selected .result-price {
+            color: #4a7c1a;
+        }
+
+        .order-details-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .order-details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .order-detail-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2d5016;
+        }
+
+        .order-detail-label {
+            font-size: 0.85em;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .order-detail-value {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2d5016;
+        }
+
+        .order-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
         /* Forms Section */
         .forms-section {
             display: grid;
@@ -172,11 +301,11 @@
         }
 
         .form-card h3 {
-            color: #667eea;
+            color: #2d5016;
             font-size: 1.3em;
             margin-bottom: 25px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #2d5016;
         }
 
         .form-group {
@@ -202,53 +331,14 @@
 
         input:focus, select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .autocomplete-wrapper {
-            position: relative;
-        }
-
-        .autocomplete-list {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 2px solid #667eea;
-            border-top: none;
-            border-radius: 0 0 8px 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            display: none;
-            z-index: 1000;
-        }
-
-        .autocomplete-list.active {
-            display: block;
-        }
-
-        .autocomplete-item {
-            padding: 12px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-            transition: background 0.2s;
-        }
-
-        .autocomplete-item:hover {
-            background: #f0f0f0;
-        }
-
-        .autocomplete-item.selected {
-            background: #667eea;
-            color: white;
+            border-color: #2d5016;
+            box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
         }
 
         button {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c1a 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -261,7 +351,7 @@
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 16px rgba(45, 80, 22, 0.4);
         }
 
         button:active {
@@ -292,11 +382,11 @@
         }
 
         .table-section h2 {
-            color: #667eea;
+            color: #2d5016;
             font-size: 1.3em;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #2d5016;
         }
 
         table {
@@ -309,7 +399,7 @@
         }
 
         thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c1a 100%);
             color: white;
         }
 
@@ -361,18 +451,6 @@
             margin-bottom: 20px;
         }
 
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 4px solid #28a745;
-        }
-
         .hidden {
             display: none;
         }
@@ -389,6 +467,9 @@
             }
             th, td {
                 padding: 10px;
+            }
+            .order-details-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -407,25 +488,60 @@
                 <input type="date" id="entryDate">
             </div>
 
+            <!-- FEEKA ORDER Section -->
+            <div class="feeka-order-section">
+                <h2>🛒 FEEKA ORDER</h2>
+
+                <div class="order-input-wrapper">
+                    <input type="text" id="feekaSearch" class="order-search-input" placeholder="🔍 Search menu item (e.g., 'Churros', 'Kunafa', 'Mango')...">
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+
+                <div class="order-details-grid">
+                    <div class="order-detail-card">
+                        <div class="order-detail-label">Selected Item</div>
+                        <div class="order-detail-value" id="selectedItemName">-- Select Item --</div>
+                    </div>
+                    <div class="order-detail-card">
+                        <div class="order-detail-label">Price (₹)</div>
+                        <div class="order-detail-value" id="selectedItemPrice">0</div>
+                    </div>
+                    <div class="order-detail-card">
+                        <div class="order-detail-label">Total (₹)</div>
+                        <div class="order-detail-value" id="selectedItemTotal">0</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feekaQuantity">Quantity:</label>
+                    <input type="number" id="feekaQuantity" value="1" min="1">
+                </div>
+
+                <div class="order-actions">
+                    <button onclick="addFeekaOrder()">✅ Add Order</button>
+                    <button class="button-secondary" onclick="clearFeekaOrder()">🔄 Clear</button>
+                </div>
+            </div>
+
             <!-- KPI Cards - Sales Section -->
             <div class="kpi-section">
                 <h2>📊 Daily Sales</h2>
                 <div class="kpi-grid">
                     <div class="kpi-card">
                         <div class="kpi-label">Dessert Sales</div>
-                        <div class="kpi-value">$<span id="dessertSales">0.00</span></div>
+                        <div class="kpi-value">₹<span id="dessertSales">0.00</span></div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Food Sales</div>
-                        <div class="kpi-value">$<span id="foodSales">0.00</span></div>
+                        <div class="kpi-value">₹<span id="foodSales">0.00</span></div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Beverage Sales</div>
-                        <div class="kpi-value">$<span id="beverageSales">0.00</span></div>
+                        <div class="kpi-value">₹<span id="beverageSales">0.00</span></div>
                     </div>
                     <div class="kpi-card total">
                         <div class="kpi-label">Total Sales</div>
-                        <div class="kpi-value">$<span id="totalSales">0.00</span></div>
+                        <div class="kpi-value">₹<span id="totalSales">0.00</span></div>
                     </div>
                 </div>
             </div>
@@ -436,27 +552,27 @@
                 <div class="kpi-grid">
                     <div class="kpi-card">
                         <div class="kpi-label">Dessert Expenses</div>
-                        <div class="kpi-value">$<span id="dessertExpenses">0.00</span></div>
+                        <div class="kpi-value">₹<span id="dessertExpenses">0.00</span></div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Food Expenses</div>
-                        <div class="kpi-value">$<span id="foodExpenses">0.00</span></div>
+                        <div class="kpi-value">₹<span id="foodExpenses">0.00</span></div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Beverage Expenses</div>
-                        <div class="kpi-value">$<span id="beverageExpenses">0.00</span></div>
+                        <div class="kpi-value">₹<span id="beverageExpenses">0.00</span></div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Salaries</div>
-                        <div class="kpi-value">$<span id="salaries">0.00</span></div>
+                        <div class="kpi-value">₹<span id="salaries">0.00</span></div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Other Expenses</div>
-                        <div class="kpi-value">$<span id="otherExpenses">0.00</span></div>
+                        <div class="kpi-value">₹<span id="otherExpenses">0.00</span></div>
                     </div>
                     <div class="kpi-card total">
                         <div class="kpi-label">Total Expenses</div>
-                        <div class="kpi-value">$<span id="totalExpenses">0.00</span></div>
+                        <div class="kpi-value">₹<span id="totalExpenses">0.00</span></div>
                     </div>
                 </div>
             </div>
@@ -467,44 +583,13 @@
                 <div class="kpi-grid">
                     <div class="kpi-card" id="profitCard">
                         <div class="kpi-label">Daily Net Profit/Loss</div>
-                        <div class="kpi-value">$<span id="dailyProfit">0.00</span></div>
+                        <div class="kpi-value">₹<span id="dailyProfit">0.00</span></div>
                     </div>
                 </div>
             </div>
 
             <!-- Input Forms Section -->
             <div class="forms-section">
-                <!-- Place Order Form -->
-                <div class="form-card">
-                    <h3>🛒 Place Order</h3>
-
-                    <div class="form-group">
-                        <label for="menuSearch">Search Menu Item:</label>
-                        <div class="autocomplete-wrapper">
-                            <input type="text" id="menuSearch" placeholder="Type item name...">
-                            <div id="autocompleteList" class="autocomplete-list"></div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="itemCategory">Category:</label>
-                        <input type="text" id="itemCategory" readonly placeholder="Auto-detected">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="itemPrice">Price:</label>
-                        <input type="text" id="itemPrice" readonly placeholder="$0.00">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="itemQuantity">Quantity:</label>
-                        <input type="number" id="itemQuantity" value="1" min="1">
-                    </div>
-
-                    <button onclick="addOrder()">➕ Add to Sales</button>
-                    <button class="button-secondary" onclick="clearOrderForm()">🔄 Clear</button>
-                </div>
-
                 <!-- Expense Entry Form -->
                 <div class="form-card">
                     <h3>💰 Add Expense</h3>
@@ -522,7 +607,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="expenseAmount">Amount ($):</label>
+                        <label for="expenseAmount">Amount (₹):</label>
                         <input type="number" id="expenseAmount" placeholder="0.00" step="0.01" min="0">
                     </div>
 
@@ -533,6 +618,34 @@
 
                     <button onclick="addExpense()">➕ Add Expense</button>
                     <button class="button-secondary" onclick="clearExpenseForm()">🔄 Clear</button>
+                </div>
+
+                <!-- Additional Sales Form -->
+                <div class="form-card">
+                    <h3>💵 Add Other Sales</h3>
+
+                    <div class="form-group">
+                        <label for="salesCategory">Sales Category:</label>
+                        <select id="salesCategory">
+                            <option value="">-- Select Category --</option>
+                            <option value="Dessert">🍰 Dessert</option>
+                            <option value="Food">🍔 Food</option>
+                            <option value="Beverage">☕ Beverage</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salesAmount">Amount (₹):</label>
+                        <input type="number" id="salesAmount" placeholder="0.00" step="0.01" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salesDescription">Description (Optional):</label>
+                        <input type="text" id="salesDescription" placeholder="Notes...">
+                    </div>
+
+                    <button onclick="addSales()">➕ Add Sales</button>
+                    <button class="button-secondary" onclick="clearSalesForm()">🔄 Clear</button>
                 </div>
             </div>
 
@@ -546,7 +659,7 @@
                             <th>Type</th>
                             <th>Category</th>
                             <th>Description</th>
-                            <th class="text-right">Amount</th>
+                            <th class="text-right">Amount (₹)</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -561,44 +674,119 @@
     </div>
 
     <script>
-        // Menu data from CSV
-        const menuItems = [
-            {name: 'Espresso', category: 'Beverage', price: 2.50},
-            {name: 'Cappuccino', category: 'Beverage', price: 3.50},
-            {name: 'Latte', category: 'Beverage', price: 3.75},
-            {name: 'Americano', category: 'Beverage', price: 2.75},
-            {name: 'Macchiato', category: 'Beverage', price: 3.25},
-            {name: 'Mocha', category: 'Beverage', price: 4.00},
-            {name: 'Flat White', category: 'Beverage', price: 3.75},
-            {name: 'Cold Brew', category: 'Beverage', price: 3.00},
-            {name: 'Iced Coffee', category: 'Beverage', price: 3.25},
-            {name: 'Chocolate Croissant', category: 'Food', price: 3.50},
-            {name: 'Almond Croissant', category: 'Food', price: 4.00},
-            {name: 'Pain au Chocolat', category: 'Food', price: 3.25},
-            {name: 'Blueberry Muffin', category: 'Food', price: 3.75},
-            {name: 'Chocolate Chip Cookie', category: 'Dessert', price: 2.50},
-            {name: 'Carrot Cake Slice', category: 'Dessert', price: 4.50},
-            {name: 'Cheesecake Slice', category: 'Dessert', price: 5.00},
-            {name: 'Tiramisu', category: 'Dessert', price: 5.50},
-            {name: 'Brownies', category: 'Dessert', price: 3.50},
-            {name: 'Macarons (3pc)', category: 'Dessert', price: 4.50},
-            {name: 'Chocolate Mousse', category: 'Dessert', price: 4.00},
-            {name: 'Vanilla Cupcake', category: 'Dessert', price: 3.00},
-            {name: 'Chocolate Cupcake', category: 'Dessert', price: 3.00},
-            {name: 'Fruit Tart', category: 'Dessert', price: 5.00},
-            {name: 'Lemon Meringue Pie', category: 'Dessert', price: 4.75},
-            {name: 'Caesar Salad', category: 'Food', price: 8.50},
-            {name: 'Grilled Cheese Sandwich', category: 'Food', price: 7.00},
-            {name: 'Chicken Panini', category: 'Food', price: 9.00},
-            {name: 'Turkey Wrap', category: 'Food', price: 8.00},
-            {name: 'Veggie Burger', category: 'Food', price: 8.50},
-            {name: 'Quiche Lorraine', category: 'Food', price: 7.50},
-            {name: 'Pasta Carbonara', category: 'Food', price: 10.50},
-            {name: 'Margherita Pizza Slice', category: 'Food', price: 5.50},
-            {name: 'Tomato Soup', category: 'Food', price: 6.00},
-            {name: 'Iced Tea', category: 'Beverage', price: 2.50},
-            {name: 'Bottled Water', category: 'Beverage', price: 1.50},
-            {name: 'Fresh Orange Juice', category: 'Beverage', price: 3.50}
+        // Complete FEEKA Menu with all items and prices in INR
+        const feekaMenu = [
+            // Signatures
+            {name: 'Churros', price: 119, category: 'Dessert'},
+            {name: 'Croson', price: 169, category: 'Dessert'},
+            {name: 'Choco Burger', price: 99, category: 'Dessert'},
+            {name: 'Choco Waffle', price: 99, category: 'Dessert'},
+
+            // Stormy Sweet
+            {name: 'Choco Thuffan', price: 199, category: 'Dessert'},
+            {name: 'Mango Thuffan', price: 229, category: 'Dessert'},
+            {name: 'Hazelnut Mango Cyclone', price: 229, category: 'Dessert'},
+            {name: 'Pista Mango Thunderstorm', price: 229, category: 'Dessert'},
+            {name: 'Biscoff Mango Hurricane', price: 229, category: 'Dessert'},
+            {name: 'Pista Hazelnut Earthquake', price: 229, category: 'Dessert'},
+            {name: 'Pista Biscoff Thuffan', price: 249, category: 'Dessert'},
+            {name: 'Coffee Mango Cyclonet', price: 229, category: 'Dessert'},
+            {name: 'Pista Coffee Earthquake', price: 229, category: 'Dessert'},
+
+            // Bambooza
+            {name: 'Bambooza Pistachio Hazelnut', price: 349, category: 'Dessert'},
+            {name: 'Bambooza Biscoff', price: 349, category: 'Dessert'},
+            {name: 'Bambooza Mango', price: 349, category: 'Dessert'},
+            {name: 'Bambooza Hazelnut', price: 349, category: 'Dessert'},
+            {name: 'Bambooza Pistachio Biscoff', price: 349, category: 'Dessert'},
+            {name: 'Bambooza Pistachio', price: 349, category: 'Dessert'},
+
+            // Lo'a
+            {name: 'Lo\'a Kinder', price: 349, category: 'Dessert'},
+            {name: 'Lo\'a Hazelnut', price: 349, category: 'Dessert'},
+            {name: 'Lo\'a Biscoff', price: 349, category: 'Dessert'},
+            {name: 'Lo\'a Pistachio Hazelnut', price: 349, category: 'Dessert'},
+            {name: 'Lo\'a Pistachio Biscoff', price: 349, category: 'Dessert'},
+            {name: 'Lo\'a Pistachio', price: 349, category: 'Dessert'},
+
+            // Fresh Fruit Delights
+            {name: 'Choco Strawberry', price: 199, category: 'Dessert'},
+            {name: 'Choco Mango', price: 149, category: 'Dessert'},
+            {name: 'Choco Kiwi', price: 199, category: 'Dessert'},
+            {name: 'Choco Banana', price: 99, category: 'Dessert'},
+
+            // Umm Ahi with Icecream
+            {name: 'Umm Ahi Kinder', price: 299, category: 'Dessert'},
+            {name: 'Umm Ahi Pistachio', price: 299, category: 'Dessert'},
+            {name: 'Umm Ahi Pistachio Hazelnut', price: 299, category: 'Dessert'},
+            {name: 'Umm Ahi Biscoff', price: 299, category: 'Dessert'},
+
+            // Layali Feeka (Bottle Series)
+            {name: 'Layali Biscoff', price: 149, category: 'Beverage'},
+            {name: 'Qahwa Malaki', price: 149, category: 'Beverage'},
+            {name: 'Bunduq Hazelnut', price: 149, category: 'Beverage'},
+            {name: 'Fustuq Royale Pistachio', price: 149, category: 'Beverage'},
+            {name: 'Kinder Layali', price: 149, category: 'Beverage'},
+
+            // Heban Cake
+            {name: 'Heban Pistachio Kinder', price: 299, category: 'Dessert'},
+            {name: 'Heban Pistachio Biscoff', price: 299, category: 'Dessert'},
+            {name: 'Heban Pistachio Hazelnut', price: 299, category: 'Dessert'},
+
+            // Choco Desserts
+            {name: 'Choco Spunge Classic', price: 69, category: 'Dessert'},
+            {name: 'Choco Spunge Premium', price: 99, category: 'Dessert'},
+            {name: 'Choco Brownie Classic', price: 79, category: 'Dessert'},
+            {name: 'Choco Brownie Premium', price: 109, category: 'Dessert'},
+            {name: 'Coffee Spunge Classic', price: 69, category: 'Dessert'},
+            {name: 'Coffee Spunge Premium', price: 99, category: 'Dessert'},
+            {name: 'Coffee Brownie Classic', price: 89, category: 'Dessert'},
+            {name: 'Coffee Brownie Premium', price: 119, category: 'Dessert'},
+
+            // Kunafa Bowls
+            {name: 'Coffee Hazelnut Kunafa', price: 249, category: 'Dessert'},
+            {name: 'Biscoff White Kunafa', price: 249, category: 'Dessert'},
+            {name: 'Pista Kunafa', price: 249, category: 'Dessert'},
+            {name: 'Biscoff Kunafa', price: 249, category: 'Dessert'},
+            {name: 'Pista White Kunafa', price: 249, category: 'Dessert'},
+            {name: 'Biscoff Hazelnut Kunafa', price: 249, category: 'Dessert'},
+            {name: 'Hazelnut White Kunafa', price: 249, category: 'Dessert'},
+            {name: 'Hazelnut Pista Kunafa', price: 249, category: 'Dessert'},
+            {name: 'White Chocolate Kunafa', price: 249, category: 'Dessert'},
+            {name: 'Pista Biscoff Kunafa', price: 249, category: 'Dessert'},
+            {name: 'Hazelnut Kunafa', price: 219, category: 'Dessert'},
+            {name: 'Pista Coffee Kunafa', price: 249, category: 'Dessert'},
+
+            // Additional Items
+            {name: 'Cheese Bomb', price: 289, category: 'Dessert'},
+            {name: 'Matilda Thuffan', price: 269, category: 'Dessert'},
+            {name: 'Kabsa', price: 349, category: 'Food'},
+
+            // Salankatia
+            {name: 'Salankatia Hazelnut Biscoff', price: 349, category: 'Dessert'},
+            {name: 'Salankatia Biscoff', price: 349, category: 'Dessert'},
+            {name: 'Salankatia Pistachio Biscoff', price: 349, category: 'Dessert'},
+            {name: 'Salankatia Pistachio Hazelnut', price: 349, category: 'Dessert'},
+            {name: 'Salankatia Mango', price: 349, category: 'Dessert'},
+            {name: 'Salankatia Hazelnut', price: 349, category: 'Dessert'},
+            {name: 'Salankatia Pistachio', price: 349, category: 'Dessert'},
+
+            // Qashtita
+            {name: 'Qashtita Mango Banana', price: 299, category: 'Dessert'},
+            {name: 'Qashtita Mango Strawberry', price: 299, category: 'Dessert'},
+            {name: 'Qashtita Banana Strawberry', price: 299, category: 'Dessert'},
+            {name: 'Qashtita Mango', price: 299, category: 'Dessert'},
+            {name: 'Qashtita Hazelnut', price: 299, category: 'Dessert'},
+            {name: 'Qashtita Pistachio Hazelnut', price: 299, category: 'Dessert'},
+            {name: 'Qashtita Pistachio Biscoff', price: 299, category: 'Dessert'},
+            {name: 'Qashtita Pistachio', price: 299, category: 'Dessert'},
+            {name: 'Qashtita Biscoff', price: 299, category: 'Dessert'},
+
+            // Drinks
+            {name: 'Mango Malesia', price: 99, category: 'Beverage'},
+            {name: 'Korean Strawberry', price: 99, category: 'Beverage'},
+            {name: 'Milo', price: 99, category: 'Beverage'},
+            {name: 'Iced Coffee', price: 99, category: 'Beverage'}
         ];
 
         let dailyData = {
@@ -613,86 +801,92 @@
             entries: []
         };
 
+        let selectedMenuItem = null;
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('entryDate').value = today;
             loadData();
-            setupAutocomplete();
+            setupFeekaSearch();
         });
 
-        // Setup autocomplete
-        function setupAutocomplete() {
-            const searchInput = document.getElementById('menuSearch');
-            const autocompleteList = document.getElementById('autocompleteList');
+        // Setup FEEKA Search
+        function setupFeekaSearch() {
+            const searchInput = document.getElementById('feekaSearch');
+            const searchResults = document.getElementById('searchResults');
 
             searchInput.addEventListener('input', function() {
                 const value = this.value.toLowerCase();
-                autocompleteList.innerHTML = '';
+                searchResults.innerHTML = '';
 
                 if (value.length < 1) {
-                    autocompleteList.classList.remove('active');
+                    searchResults.classList.remove('active');
                     return;
                 }
 
-                const filtered = menuItems.filter(item =>
+                const filtered = feekaMenu.filter(item =>
                     item.name.toLowerCase().includes(value)
                 );
 
                 if (filtered.length === 0) {
-                    autocompleteList.classList.remove('active');
+                    searchResults.classList.remove('active');
                     return;
                 }
 
                 filtered.forEach(item => {
                     const div = document.createElement('div');
-                    div.className = 'autocomplete-item';
-                    div.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-                    div.onclick = () => selectMenuItem(item);
-                    autocompleteList.appendChild(div);
+                    div.className = 'search-result-item';
+                    div.innerHTML = `<span class="result-name">${item.name}</span><span class="result-price">₹${item.price}</span>`;
+                    div.onclick = () => selectFeekaItem(item);
+                    searchResults.appendChild(div);
                 });
 
-                autocompleteList.classList.add('active');
+                searchResults.classList.add('active');
             });
 
             document.addEventListener('click', function(e) {
                 if (e.target !== searchInput) {
-                    autocompleteList.classList.remove('active');
+                    searchResults.classList.remove('active');
                 }
             });
         }
 
-        // Select menu item
-        function selectMenuItem(item) {
-            document.getElementById('menuSearch').value = item.name;
-            document.getElementById('itemCategory').value = item.category;
-            document.getElementById('itemPrice').value = '$' + item.price.toFixed(2);
-            document.getElementById('itemQuantity').value = 1;
-            document.getElementById('autocompleteList').classList.remove('active');
+        // Select FEEKA Item
+        function selectFeekaItem(item) {
+            selectedMenuItem = item;
+            document.getElementById('feekaSearch').value = item.name;
+            document.getElementById('selectedItemName').textContent = item.name;
+            document.getElementById('selectedItemPrice').textContent = item.price;
+            updateFeekaTotal();
+            document.getElementById('searchResults').classList.remove('active');
         }
 
-        // Add order
-        function addOrder() {
-            const itemName = document.getElementById('menuSearch').value;
-            const category = document.getElementById('itemCategory').value;
-            const priceStr = document.getElementById('itemPrice').value.replace('$', '');
-            const price = parseFloat(priceStr) || 0;
-            const quantity = parseInt(document.getElementById('itemQuantity').value) || 1;
+        // Update FEEKA Total
+        function updateFeekaTotal() {
+            if (!selectedMenuItem) return;
+            const quantity = parseInt(document.getElementById('feekaQuantity').value) || 1;
+            const total = selectedMenuItem.price * quantity;
+            document.getElementById('selectedItemTotal').textContent = total;
+        }
 
-            if (!itemName || !category || price === 0) {
-                alert('Please select a valid menu item');
+        // Add FEEKA Order
+        function addFeekaOrder() {
+            if (!selectedMenuItem) {
+                alert('Please select an item');
                 return;
             }
 
-            const amount = price * quantity;
+            const quantity = parseInt(document.getElementById('feekaQuantity').value) || 1;
+            const amount = selectedMenuItem.price * quantity;
             const date = document.getElementById('entryDate').value;
 
             // Add to sales based on category
-            if (category === 'Dessert') {
+            if (selectedMenuItem.category === 'Dessert') {
                 dailyData.dessertSales += amount;
-            } else if (category === 'Food') {
+            } else if (selectedMenuItem.category === 'Food') {
                 dailyData.foodSales += amount;
-            } else if (category === 'Beverage') {
+            } else if (selectedMenuItem.category === 'Beverage') {
                 dailyData.beverageSales += amount;
             }
 
@@ -700,14 +894,24 @@
             dailyData.entries.push({
                 date: date,
                 type: 'Sale',
-                category: category,
-                description: `${itemName} x${quantity}`,
+                category: selectedMenuItem.category,
+                description: `${selectedMenuItem.name} x${quantity}`,
                 amount: amount
             });
 
-            clearOrderForm();
+            clearFeekaOrder();
             updateDisplay();
             saveData();
+        }
+
+        // Clear FEEKA Order
+        function clearFeekaOrder() {
+            selectedMenuItem = null;
+            document.getElementById('feekaSearch').value = '';
+            document.getElementById('selectedItemName').textContent = '-- Select Item --';
+            document.getElementById('selectedItemPrice').textContent = '0';
+            document.getElementById('selectedItemTotal').textContent = '0';
+            document.getElementById('feekaQuantity').value = '1';
         }
 
         // Add expense
@@ -750,20 +954,57 @@
             saveData();
         }
 
-        // Clear order form
-        function clearOrderForm() {
-            document.getElementById('menuSearch').value = '';
-            document.getElementById('itemCategory').value = '';
-            document.getElementById('itemPrice').value = '';
-            document.getElementById('itemQuantity').value = '1';
+        // Add other sales
+        function addSales() {
+            const category = document.getElementById('salesCategory').value;
+            const amount = parseFloat(document.getElementById('salesAmount').value) || 0;
+            const description = document.getElementById('salesDescription').value;
+
+            if (!category || amount === 0) {
+                alert('Please select category and enter amount');
+                return;
+            }
+
+            const date = document.getElementById('entryDate').value;
+
+            // Add to sales based on category
+            if (category === 'Dessert') {
+                dailyData.dessertSales += amount;
+            } else if (category === 'Food') {
+                dailyData.foodSales += amount;
+            } else if (category === 'Beverage') {
+                dailyData.beverageSales += amount;
+            }
+
+            // Add entry
+            dailyData.entries.push({
+                date: date,
+                type: 'Sale',
+                category: category,
+                description: description || 'Sales',
+                amount: amount
+            });
+
+            clearSalesForm();
+            updateDisplay();
+            saveData();
         }
 
-        // Clear expense form
+        // Clear forms
         function clearExpenseForm() {
             document.getElementById('expenseCategory').value = '';
             document.getElementById('expenseAmount').value = '';
             document.getElementById('expenseDescription').value = '';
         }
+
+        function clearSalesForm() {
+            document.getElementById('salesCategory').value = '';
+            document.getElementById('salesAmount').value = '';
+            document.getElementById('salesDescription').value = '';
+        }
+
+        // Update quantity listener
+        document.getElementById('feekaQuantity')?.addEventListener('change', updateFeekaTotal);
 
         // Update display - STRICT KPI ORDERING
         function updateDisplay() {
@@ -815,7 +1056,7 @@
                     <td>${entry.type}</td>
                     <td>${entry.category}</td>
                     <td>${entry.description}</td>
-                    <td class="text-right">$${entry.amount.toFixed(2)}</td>
+                    <td class="text-right">₹${entry.amount.toFixed(2)}</td>
                     <td class="text-right">
                         <button class="delete-btn" onclick="deleteEntry(${index})">🗑️ Delete</button>
                     </td>
