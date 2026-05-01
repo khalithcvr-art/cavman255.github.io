@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feeka Cafe - Daily Finance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 40px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 24px;
+            background: #667eea;
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .button-secondary {
+            background: #6c757d;
+        }
+
+        .button-success {
+            background: #28a745;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .metric-value.profit {
+            color: #28a745;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .data-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .export-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .summary-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid #667eea;
+        }
+
+        .summary-card.expenses {
+            border-top-color: #dc3545;
+        }
+
+        .summary-card.sales {
+            border-top-color: #28a745;
+        }
+
+        .summary-card.profit {
+            border-top-color: #ffc107;
+        }
+
+        .summary-card label {
+            margin-bottom: 5px;
+        }
+
+        .summary-card .value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-style: italic;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>☕ Feeka Cafe Daily Finance Dashboard</h1>
+            <p>Track Your Daily Expenses, Sales & Profits in Real-Time</p>
+        </div>
+
+        <div class="main-content">
+            <!-- LEFT COLUMN: INPUT FORMS -->
+            <div>
+                <!-- Daily Entry Form -->
+                <div class="section">
+                    <h2>Daily Entry</h2>
+                    <div class="success-message" id="successMessage">✓ Entry added successfully!</div>
+
+                    <div class="form-group">
+                        <label for="entryDate">📅 Date</label>
+                        <input type="date" id="entryDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dayName">📆 Day</label>
+                        <select id="dayName">
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+
+                    <h3 style="color: #667eea; margin-top: 25px; margin-bottom: 15px;">💰 Expenses</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="foodExpenses">Food Expenses ($)</label>
+                            <input type="number" id="foodExpenses" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="dessertExpenses">Dessert Expenses ($)</label>
+                            <input type="number" id="dessertExpenses" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="beverageExpenses">Beverage Expenses ($)</label>
+                            <input type="number" id="beverageExpenses" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="otherExpenses">Other Expenses ($)</label>
+                            <input type="number" id="otherExpenses" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <h3 style="color: #28a745; margin-top: 25px; margin-bottom: 15px;">📊 Sales</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="foodSales">Food Sales ($)</label>
+                            <input type="number" id="foodSales" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="dessertSales">Dessert Sales ($)</label>
+                            <input type="number" id="dessertSales" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="beverageSales">Beverage Sales ($)</label>
+                            <input type="number" id="beverageSales" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="otherSales">Other Sales ($)</label>
+                            <input type="number" id="otherSales" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">📝 Notes</label>
+                        <input type="text" id="notes" placeholder="Any special notes...">
+                    </div>
+
+                    <button class="button button-success" onclick="addEntry()">✓ Add Daily Entry</button>
+                </div>
+
+                <!-- Export Section -->
+                <div class="section" style="margin-top: 30px;">
+                    <h2>Export Data</h2>
+                    <div class="export-section">
+                        <button class="button button-secondary" onclick="exportToCSV()">📥 Export CSV</button>
+                        <button class="button button-secondary" onclick="exportToExcel()">📊 Export Excel</button>
+                    </div>
+                    <button class="button button-secondary" style="margin-top: 10px;" onclick="clearAllData()">🗑️ Clear Data</button>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: DASHBOARD & ANALYTICS -->
+            <div>
+                <!-- Today's Summary -->
+                <div class="section">
+                    <h2>Today's Summary</h2>
+                    <div class="summary-cards">
+                        <div class="summary-card expenses">
+                            <label>Total Expenses</label>
+                            <div class="value" id="totalExpensesToday">$0.00</div>
+                        </div>
+                        <div class="summary-card sales">
+                            <label>Total Sales</label>
+                            <div class="value" id="totalSalesToday">$0.00</div>
+                        </div>
+                        <div class="summary-card profit">
+                            <label>Daily Profit</label>
+                            <div class="value" id="profitToday">$0.00</div>
+                        </div>
+                        <div class="summary-card">
+                            <label>Profit Margin</label>
+                            <div class="value" id="marginToday">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="section" style="margin-top: 30px;">
+                    <h2>Sales Analysis</h2>
+                    <div class="chart-container">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="section" style="margin-top: 30px;">
+                    <h2>Expense Breakdown</h2>
+                    <div class="chart-container">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="section" style="margin-top: 30px;">
+                    <h2>Profit Trend</h2>
+                    <div class="chart-container">
+                        <canvas id="profitChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table Section -->
+        <div class="section" style="margin: 30px;">
+            <h2>📋 All Entries</h2>
+            <div id="dataTableContainer" class="no-data">No entries yet. Add your first daily record!</div>
+        </div>
+    </div>
+
+    <script>
+        let entries = [];
+        let salesChart, expenseChart, profitChart;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('entryDate').value = today;
+
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            document.getElementById('dayName').value = dayNames[new Date().getDay()];
+
+            loadFromLocalStorage();
+            initCharts();
+        });
+
+        function addEntry() {
+            const entry = {
+                date: document.getElementById('entryDate').value,
+                day: document.getElementById('dayName').value,
+                foodExpenses: parseFloat(document.getElementById('foodExpenses').value) || 0,
+                dessertExpenses: parseFloat(document.getElementById('dessertExpenses').value) || 0,
+                beverageExpenses: parseFloat(document.getElementById('beverageExpenses').value) || 0,
+                otherExpenses: parseFloat(document.getElementById('otherExpenses').value) || 0,
+                foodSales: parseFloat(document.getElementById('foodSales').value) || 0,
+                dessertSales: parseFloat(document.getElementById('dessertSales').value) || 0,
+                beverageSales: parseFloat(document.getElementById('beverageSales').value) || 0,
+                otherSales: parseFloat(document.getElementById('otherSales').value) || 0,
+                notes: document.getElementById('notes').value
+            };
+
+            entry.totalExpenses = entry.foodExpenses + entry.dessertExpenses + entry.beverageExpenses + entry.otherExpenses;
+            entry.totalSales = entry.foodSales + entry.dessertSales + entry.beverageSales + entry.otherSales;
+            entry.profit = entry.totalSales - entry.totalExpenses;
+            entry.marginPercent = entry.totalSales > 0 ? ((entry.profit / entry.totalSales) * 100).toFixed(2) : 0;
+
+            entries.push(entry);
+            saveToLocalStorage();
+            updateDashboard();
+            clearForm();
+
+            const msg = document.getElementById('successMessage');
+            msg.classList.add('show');
+            setTimeout(() => msg.classList.remove('show'), 3000);
+        }
+
+        function deleteEntry(index) {
+            if (confirm('Delete this entry?')) {
+                entries.splice(index, 1);
+                saveToLocalStorage();
+                updateDashboard();
+            }
+        }
+
+        function updateDashboard() {
+            updateSummary();
+            updateTable();
+            updateCharts();
+        }
+
+        function updateSummary() {
+            if (entries.length === 0) {
+                document.getElementById('totalExpensesToday').textContent = '$0.00';
+                document.getElementById('totalSalesToday').textContent = '$0.00';
+                document.getElementById('profitToday').textContent = '$0.00';
+                document.getElementById('marginToday').textContent = '0%';
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            const todayEntry = entries.find(e => e.date === today);
+
+            if (todayEntry) {
+                document.getElementById('totalExpensesToday').textContent = '$' + todayEntry.totalExpenses.toFixed(2);
+                document.getElementById('totalSalesToday').textContent = '$' + todayEntry.totalSales.toFixed(2);
+                document.getElementById('profitToday').textContent = '$' + todayEntry.profit.toFixed(2);
+                document.getElementById('marginToday').textContent = todayEntry.marginPercent + '%';
+            }
+        }
+
+        function updateTable() {
+            const container = document.getElementById('dataTableContainer');
+
+            if (entries.length === 0) {
+                container.innerHTML = '<div class="no-data">No entries yet. Add your first daily record!</div>';
+                return;
+            }
+
+            let html = `<table class="data-table"><thead><tr><th>Date</th><th>Day</th><th>Food Exp</th><th>Dessert Exp</th><th>Total Exp</th><th>Food Sales</th><th>Dessert Sales</th><th>Total Sales</th><th>Profit</th><th>Margin</th><th>Action</th></tr></thead><tbody>`;
+
+            entries.forEach((entry, index) => {
+                html += `<tr><td>${entry.date}</td><td>${entry.day}</td><td>$${entry.foodExpenses.toFixed(2)}</td><td>$${entry.dessertExpenses.toFixed(2)}</td><td>$${entry.totalExpenses.toFixed(2)}</td><td>$${entry.foodSales.toFixed(2)}</td><td>$${entry.dessertSales.toFixed(2)}</td><td>$${entry.totalSales.toFixed(2)}</td><td style="color: #28a745; font-weight: bold;">$${entry.profit.toFixed(2)}</td><td>${entry.marginPercent}%</td><td><button class="delete-btn" onclick="deleteEntry(${index})">Delete</button></td></tr>`;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function initCharts() {
+            const ctx1 = document.getElementById('salesChart').getContext('2d');
+            salesChart = new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Food', 'Dessert', 'Beverage', 'Other'],
+                    datasets: [{
+                        data: [0, 0, 0, 0],
+                        backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe'],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+
+            const ctx2 = document.getElementById('expenseChart').getContext('2d');
+            expenseChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Food Exp',
+                        data: [],
+                        backgroundColor: '#667eea'
+                    }, {
+                        label: 'Dessert Exp',
+                        data: [],
+                        backgroundColor: '#764ba2'
+                    }, {
+                        label: 'Beverage Exp',
+                        data: [],
+                        backgroundColor: '#f093fb'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            const ctx3 = document.getElementById('profitChart').getContext('2d');
+            profitChart = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Daily Profit',
+                        data: [],
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#28a745'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (entries.length === 0) return;
+
+            const totalFoodSales = entries.reduce((sum, e) => sum + e.foodSales, 0);
+            const totalDessertSales = entries.reduce((sum, e) => sum + e.dessertSales, 0);
+            const totalBeverageSales = entries.reduce((sum, e) => sum + e.beverageSales, 0);
+            const totalOtherSales = entries.reduce((sum, e) => sum + e.otherSales, 0);
+
+            salesChart.data.datasets[0].data = [totalFoodSales, totalDessertSales, totalBeverageSales, totalOtherSales];
+            salesChart.update();
+
+            const last7 = entries.slice(-7);
+            expenseChart.data.labels = last7.map(e => e.date);
+            expenseChart.data.datasets[0].data = last7.map(e => e.foodExpenses);
+            expenseChart.data.datasets[1].data = last7.map(e => e.dessertExpenses);
+            expenseChart.data.datasets[2].data = last7.map(e => e.beverageExpenses);
+            expenseChart.update();
+
+            profitChart.data.labels = entries.map(e => e.date);
+            profitChart.data.datasets[0].data = entries.map(e => e.profit);
+            profitChart.update();
+        }
+
+        function clearForm() {
+            document.getElementById('foodExpenses').value = '';
+            document.getElementById('dessertExpenses').value = '';
+            document.getElementById('beverageExpenses').value = '';
+            document.getElementById('otherExpenses').value = '';
+            document.getElementById('foodSales').value = '';
+            document.getElementById('dessertSales').value = '';
+            document.getElementById('beverageSales').value = '';
+            document.getElementById('otherSales').value = '';
+            document.getElementById('notes').value = '';
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('feekaCafeData', JSON.stringify(entries));
+        }
+
+        function loadFromLocalStorage() {
+            const data = localStorage.getItem('feekaCafeData');
+            if (data) {
+                entries = JSON.parse(data);
+                updateDashboard();
+            }
+        }
+
+        function exportToCSV() {
+            if (entries.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+
+            let csv = 'Date,Day,Food Exp,Dessert Exp,Total Exp,Food Sales,Dessert Sales,Total Sales,Profit,Margin %\n';
+            entries.forEach(e => {
+                csv += `${e.date},${e.day},${e.foodExpenses},${e.dessertExpenses},${e.totalExpenses},${e.foodSales},${e.dessertSales},${e.totalSales},${e.profit},${e.marginPercent}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Feeka_Cafe_Finance_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        function exportToExcel() {
+            if (entries.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+
+            const data = entries.map(e => ({
+                'Date': e.date,
+                'Day': e.day,
+                'Food Exp': e.foodExpenses,
+                'Dessert Exp': e.dessertExpenses,
+                'Total Exp': e.totalExpenses,
+                'Food Sales': e.foodSales,
+                'Dessert Sales': e.dessertSales,
+                'Total Sales': e.totalSales,
+                'Profit': e.profit,
+                'Margin %': e.marginPercent
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Finance');
+            XLSX.writeFile(wb, `Feeka_Cafe_Finance_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+
+        function clearAllData() {
+            if (confirm('Delete all data? Cannot undo!')) {
+                entries = [];
+                saveToLocalStorage();
+                updateDashboard();
+                alert('All data cleared!');
+            }
+        }
+    </script>
+</body>
+</html>
