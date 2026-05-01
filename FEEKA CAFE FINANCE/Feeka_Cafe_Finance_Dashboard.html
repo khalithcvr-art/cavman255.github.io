@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feeka Cafe - Daily Finance Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
+    <title>Feeka Cafe Finance - Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -21,10 +19,10 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
+            border-radius: 15px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
         }
@@ -38,50 +36,147 @@
 
         .header h1 {
             font-size: 2.5em;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .header p {
             font-size: 1.1em;
-            opacity: 0.9;
+            opacity: 0.95;
         }
 
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+        .content {
             padding: 40px;
         }
 
+        .date-section {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .date-section label {
+            font-weight: 600;
+            color: #1976D2;
+        }
+
+        .date-section input {
+            padding: 10px 15px;
+            border: 2px solid #2196F3;
+            border-radius: 6px;
+            font-size: 1em;
+            flex: 0 0 200px;
+        }
+
+        /* KPI Cards Section */
+        .kpi-section {
+            margin-bottom: 40px;
+        }
+
+        .kpi-section h2 {
+            color: #333;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .kpi-card.total {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-left: 5px solid #667eea;
+        }
+
+        .kpi-card.profit {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-left: 5px solid #28a745;
+        }
+
+        .kpi-card.loss {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+            color: white;
+            border-left: 5px solid #dc3545;
+        }
+
+        .kpi-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .kpi-card.total .kpi-label,
+        .kpi-card.profit .kpi-label,
+        .kpi-card.loss .kpi-label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .kpi-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .kpi-card.total .kpi-value,
+        .kpi-card.profit .kpi-value,
+        .kpi-card.loss .kpi-value {
+            color: white;
+        }
+
+        /* Forms Section */
+        .forms-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
         @media (max-width: 1200px) {
-            .main-content {
+            .forms-section {
                 grid-template-columns: 1fr;
             }
         }
 
-        .section {
+        .form-card {
             background: #f8f9fa;
-            border-radius: 15px;
+            border-radius: 12px;
             padding: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        .section h2 {
+        .form-card h3 {
             color: #667eea;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section h2::before {
-            content: '';
-            display: inline-block;
-            width: 4px;
-            height: 24px;
-            background: #667eea;
-            border-radius: 2px;
+            font-size: 1.3em;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
         }
 
         .form-group {
@@ -99,7 +194,7 @@
         input, select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1em;
             transition: border-color 0.3s;
@@ -108,625 +203,669 @@
         input:focus, select:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        .autocomplete-wrapper {
+            position: relative;
         }
 
-        .button {
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #667eea;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .autocomplete-list.active {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+
+        .autocomplete-item:hover {
+            background: #f0f0f0;
+        }
+
+        .autocomplete-item.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 12px 30px;
             border-radius: 8px;
             font-size: 1em;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
         }
 
-        .button:hover {
+        button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
 
         .button-secondary {
             background: #6c757d;
         }
 
-        .button-success {
-            background: #28a745;
+        .button-secondary:hover {
+            background: #5a6268;
+            box-shadow: 0 8px 16px rgba(108, 117, 125, 0.4);
         }
 
-        .metrics {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
+        /* Table Section */
+        .table-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
         }
 
-        .metric-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .metric-label {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .metric-value {
-            font-size: 2em;
-            font-weight: bold;
+        .table-section h2 {
             color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
         }
 
-        .metric-value.profit {
-            color: #28a745;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 400px;
-            margin-top: 20px;
-        }
-
-        .data-table {
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .data-table th {
-            background: #667eea;
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 12px;
+        }
+
+        th, td {
+            padding: 15px;
             text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
             font-weight: 600;
+            font-size: 0.95em;
         }
 
-        .data-table td {
-            padding: 12px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .data-table tr:hover {
+        tbody tr:hover {
             background: #f5f5f5;
         }
 
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
         .delete-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
             padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
             font-size: 0.85em;
+            width: auto;
+            background: #dc3545;
+            margin: 0;
         }
 
         .delete-btn:hover {
             background: #c82333;
         }
 
-        .export-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 20px;
+        /* Utility Classes */
+        .text-right {
+            text-align: right;
         }
 
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px;
+        .text-success {
+            color: #28a745;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .hidden {
             display: none;
         }
 
-        .success-message.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
         @media (max-width: 768px) {
-            .summary-cards {
-                grid-template-columns: repeat(2, 1fr);
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
             }
-        }
-
-        .summary-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            border-top: 4px solid #667eea;
-        }
-
-        .summary-card.expenses {
-            border-top-color: #dc3545;
-        }
-
-        .summary-card.sales {
-            border-top-color: #28a745;
-        }
-
-        .summary-card.profit {
-            border-top-color: #ffc107;
-        }
-
-        .summary-card label {
-            margin-bottom: 5px;
-        }
-
-        .summary-card .value {
-            font-size: 1.8em;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        .no-data {
-            text-align: center;
-            color: #999;
-            padding: 30px;
-            font-style: italic;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
+            .forms-section {
+                grid-template-columns: 1fr;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>☕ Feeka Cafe Daily Finance Dashboard</h1>
-            <p>Track Your Daily Expenses, Sales & Profits in Real-Time</p>
+            <h1>☕ Feeka Cafe Finance Dashboard</h1>
+            <p>Complete Daily Finance Management System</p>
         </div>
 
-        <div class="main-content">
-            <!-- LEFT COLUMN: INPUT FORMS -->
-            <div>
-                <!-- Daily Entry Form -->
-                <div class="section">
-                    <h2>Daily Entry</h2>
-                    <div class="success-message" id="successMessage">✓ Entry added successfully!</div>
+        <div class="content">
+            <!-- Date Section -->
+            <div class="date-section">
+                <label for="entryDate">📅 Select Date:</label>
+                <input type="date" id="entryDate">
+            </div>
+
+            <!-- KPI Cards - Sales Section -->
+            <div class="kpi-section">
+                <h2>📊 Daily Sales</h2>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Dessert Sales</div>
+                        <div class="kpi-value">$<span id="dessertSales">0.00</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Food Sales</div>
+                        <div class="kpi-value">$<span id="foodSales">0.00</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Beverage Sales</div>
+                        <div class="kpi-value">$<span id="beverageSales">0.00</span></div>
+                    </div>
+                    <div class="kpi-card total">
+                        <div class="kpi-label">Total Sales</div>
+                        <div class="kpi-value">$<span id="totalSales">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Cards - Expenses Section -->
+            <div class="kpi-section">
+                <h2>💸 Daily Expenses</h2>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Dessert Expenses</div>
+                        <div class="kpi-value">$<span id="dessertExpenses">0.00</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Food Expenses</div>
+                        <div class="kpi-value">$<span id="foodExpenses">0.00</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Beverage Expenses</div>
+                        <div class="kpi-value">$<span id="beverageExpenses">0.00</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Salaries</div>
+                        <div class="kpi-value">$<span id="salaries">0.00</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Other Expenses</div>
+                        <div class="kpi-value">$<span id="otherExpenses">0.00</span></div>
+                    </div>
+                    <div class="kpi-card total">
+                        <div class="kpi-label">Total Expenses</div>
+                        <div class="kpi-value">$<span id="totalExpenses">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Cards - Profit/Loss Section -->
+            <div class="kpi-section">
+                <h2>📈 Daily Result</h2>
+                <div class="kpi-grid">
+                    <div class="kpi-card" id="profitCard">
+                        <div class="kpi-label">Daily Net Profit/Loss</div>
+                        <div class="kpi-value">$<span id="dailyProfit">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Forms Section -->
+            <div class="forms-section">
+                <!-- Place Order Form -->
+                <div class="form-card">
+                    <h3>🛒 Place Order</h3>
 
                     <div class="form-group">
-                        <label for="entryDate">📅 Date</label>
-                        <input type="date" id="entryDate">
+                        <label for="menuSearch">Search Menu Item:</label>
+                        <div class="autocomplete-wrapper">
+                            <input type="text" id="menuSearch" placeholder="Type item name...">
+                            <div id="autocompleteList" class="autocomplete-list"></div>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="dayName">📆 Day</label>
-                        <select id="dayName">
-                            <option value="Monday">Monday</option>
-                            <option value="Tuesday">Tuesday</option>
-                            <option value="Wednesday">Wednesday</option>
-                            <option value="Thursday">Thursday</option>
-                            <option value="Friday">Friday</option>
-                            <option value="Saturday">Saturday</option>
-                            <option value="Sunday">Sunday</option>
+                        <label for="itemCategory">Category:</label>
+                        <input type="text" id="itemCategory" readonly placeholder="Auto-detected">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemPrice">Price:</label>
+                        <input type="text" id="itemPrice" readonly placeholder="$0.00">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemQuantity">Quantity:</label>
+                        <input type="number" id="itemQuantity" value="1" min="1">
+                    </div>
+
+                    <button onclick="addOrder()">➕ Add to Sales</button>
+                    <button class="button-secondary" onclick="clearOrderForm()">🔄 Clear</button>
+                </div>
+
+                <!-- Expense Entry Form -->
+                <div class="form-card">
+                    <h3>💰 Add Expense</h3>
+
+                    <div class="form-group">
+                        <label for="expenseCategory">Expense Category:</label>
+                        <select id="expenseCategory">
+                            <option value="">-- Select Category --</option>
+                            <option value="Dessert Expense">🍰 Dessert Expense</option>
+                            <option value="Food Expense">🍔 Food Expense</option>
+                            <option value="Beverage Expense">☕ Beverage Expense</option>
+                            <option value="Salary">👔 Salary</option>
+                            <option value="Other Expense">📦 Other Expense</option>
                         </select>
                     </div>
 
-                    <h3 style="color: #667eea; margin-top: 25px; margin-bottom: 15px;">💰 Expenses</h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="foodExpenses">Food Expenses ($)</label>
-                            <input type="number" id="foodExpenses" placeholder="0.00" step="0.01" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="dessertExpenses">Dessert Expenses ($)</label>
-                            <input type="number" id="dessertExpenses" placeholder="0.00" step="0.01" min="0">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="beverageExpenses">Beverage Expenses ($)</label>
-                            <input type="number" id="beverageExpenses" placeholder="0.00" step="0.01" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="otherExpenses">Other Expenses ($)</label>
-                            <input type="number" id="otherExpenses" placeholder="0.00" step="0.01" min="0">
-                        </div>
-                    </div>
-
-                    <h3 style="color: #28a745; margin-top: 25px; margin-bottom: 15px;">📊 Sales</h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="foodSales">Food Sales ($)</label>
-                            <input type="number" id="foodSales" placeholder="0.00" step="0.01" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="dessertSales">Dessert Sales ($)</label>
-                            <input type="number" id="dessertSales" placeholder="0.00" step="0.01" min="0">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="beverageSales">Beverage Sales ($)</label>
-                            <input type="number" id="beverageSales" placeholder="0.00" step="0.01" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="otherSales">Other Sales ($)</label>
-                            <input type="number" id="otherSales" placeholder="0.00" step="0.01" min="0">
-                        </div>
+                    <div class="form-group">
+                        <label for="expenseAmount">Amount ($):</label>
+                        <input type="number" id="expenseAmount" placeholder="0.00" step="0.01" min="0">
                     </div>
 
                     <div class="form-group">
-                        <label for="notes">📝 Notes</label>
-                        <input type="text" id="notes" placeholder="Any special notes...">
+                        <label for="expenseDescription">Description (Optional):</label>
+                        <input type="text" id="expenseDescription" placeholder="Notes...">
                     </div>
 
-                    <button class="button button-success" onclick="addEntry()">✓ Add Daily Entry</button>
-                </div>
-
-                <!-- Export Section -->
-                <div class="section" style="margin-top: 30px;">
-                    <h2>Export Data</h2>
-                    <div class="export-section">
-                        <button class="button button-secondary" onclick="exportToCSV()">📥 Export CSV</button>
-                        <button class="button button-secondary" onclick="exportToExcel()">📊 Export Excel</button>
-                    </div>
-                    <button class="button button-secondary" style="margin-top: 10px;" onclick="clearAllData()">🗑️ Clear Data</button>
+                    <button onclick="addExpense()">➕ Add Expense</button>
+                    <button class="button-secondary" onclick="clearExpenseForm()">🔄 Clear</button>
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: DASHBOARD & ANALYTICS -->
-            <div>
-                <!-- Today's Summary -->
-                <div class="section">
-                    <h2>Today's Summary</h2>
-                    <div class="summary-cards">
-                        <div class="summary-card expenses">
-                            <label>Total Expenses</label>
-                            <div class="value" id="totalExpensesToday">$0.00</div>
-                        </div>
-                        <div class="summary-card sales">
-                            <label>Total Sales</label>
-                            <div class="value" id="totalSalesToday">$0.00</div>
-                        </div>
-                        <div class="summary-card profit">
-                            <label>Daily Profit</label>
-                            <div class="value" id="profitToday">$0.00</div>
-                        </div>
-                        <div class="summary-card">
-                            <label>Profit Margin</label>
-                            <div class="value" id="marginToday">0%</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Charts Section -->
-                <div class="section" style="margin-top: 30px;">
-                    <h2>Sales Analysis</h2>
-                    <div class="chart-container">
-                        <canvas id="salesChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="section" style="margin-top: 30px;">
-                    <h2>Expense Breakdown</h2>
-                    <div class="chart-container">
-                        <canvas id="expenseChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="section" style="margin-top: 30px;">
-                    <h2>Profit Trend</h2>
-                    <div class="chart-container">
-                        <canvas id="profitChart"></canvas>
-                    </div>
-                </div>
+            <!-- Daily Summary Table -->
+            <div class="table-section">
+                <h2>📋 Daily Summary Report</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th class="text-right">Amount</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryTable">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: #999;">No entries yet</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div>
-
-        <!-- Data Table Section -->
-        <div class="section" style="margin: 30px;">
-            <h2>📋 All Entries</h2>
-            <div id="dataTableContainer" class="no-data">No entries yet. Add your first daily record!</div>
         </div>
     </div>
 
     <script>
-        let entries = [];
-        let salesChart, expenseChart, profitChart;
+        // Menu data from CSV
+        const menuItems = [
+            {name: 'Espresso', category: 'Beverage', price: 2.50},
+            {name: 'Cappuccino', category: 'Beverage', price: 3.50},
+            {name: 'Latte', category: 'Beverage', price: 3.75},
+            {name: 'Americano', category: 'Beverage', price: 2.75},
+            {name: 'Macchiato', category: 'Beverage', price: 3.25},
+            {name: 'Mocha', category: 'Beverage', price: 4.00},
+            {name: 'Flat White', category: 'Beverage', price: 3.75},
+            {name: 'Cold Brew', category: 'Beverage', price: 3.00},
+            {name: 'Iced Coffee', category: 'Beverage', price: 3.25},
+            {name: 'Chocolate Croissant', category: 'Food', price: 3.50},
+            {name: 'Almond Croissant', category: 'Food', price: 4.00},
+            {name: 'Pain au Chocolat', category: 'Food', price: 3.25},
+            {name: 'Blueberry Muffin', category: 'Food', price: 3.75},
+            {name: 'Chocolate Chip Cookie', category: 'Dessert', price: 2.50},
+            {name: 'Carrot Cake Slice', category: 'Dessert', price: 4.50},
+            {name: 'Cheesecake Slice', category: 'Dessert', price: 5.00},
+            {name: 'Tiramisu', category: 'Dessert', price: 5.50},
+            {name: 'Brownies', category: 'Dessert', price: 3.50},
+            {name: 'Macarons (3pc)', category: 'Dessert', price: 4.50},
+            {name: 'Chocolate Mousse', category: 'Dessert', price: 4.00},
+            {name: 'Vanilla Cupcake', category: 'Dessert', price: 3.00},
+            {name: 'Chocolate Cupcake', category: 'Dessert', price: 3.00},
+            {name: 'Fruit Tart', category: 'Dessert', price: 5.00},
+            {name: 'Lemon Meringue Pie', category: 'Dessert', price: 4.75},
+            {name: 'Caesar Salad', category: 'Food', price: 8.50},
+            {name: 'Grilled Cheese Sandwich', category: 'Food', price: 7.00},
+            {name: 'Chicken Panini', category: 'Food', price: 9.00},
+            {name: 'Turkey Wrap', category: 'Food', price: 8.00},
+            {name: 'Veggie Burger', category: 'Food', price: 8.50},
+            {name: 'Quiche Lorraine', category: 'Food', price: 7.50},
+            {name: 'Pasta Carbonara', category: 'Food', price: 10.50},
+            {name: 'Margherita Pizza Slice', category: 'Food', price: 5.50},
+            {name: 'Tomato Soup', category: 'Food', price: 6.00},
+            {name: 'Iced Tea', category: 'Beverage', price: 2.50},
+            {name: 'Bottled Water', category: 'Beverage', price: 1.50},
+            {name: 'Fresh Orange Juice', category: 'Beverage', price: 3.50}
+        ];
 
+        let dailyData = {
+            dessertSales: 0,
+            foodSales: 0,
+            beverageSales: 0,
+            dessertExpenses: 0,
+            foodExpenses: 0,
+            beverageExpenses: 0,
+            salaries: 0,
+            otherExpenses: 0,
+            entries: []
+        };
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('entryDate').value = today;
-
-            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            document.getElementById('dayName').value = dayNames[new Date().getDay()];
-
-            loadFromLocalStorage();
-            initCharts();
+            loadData();
+            setupAutocomplete();
         });
 
-        function addEntry() {
-            const entry = {
-                date: document.getElementById('entryDate').value,
-                day: document.getElementById('dayName').value,
-                foodExpenses: parseFloat(document.getElementById('foodExpenses').value) || 0,
-                dessertExpenses: parseFloat(document.getElementById('dessertExpenses').value) || 0,
-                beverageExpenses: parseFloat(document.getElementById('beverageExpenses').value) || 0,
-                otherExpenses: parseFloat(document.getElementById('otherExpenses').value) || 0,
-                foodSales: parseFloat(document.getElementById('foodSales').value) || 0,
-                dessertSales: parseFloat(document.getElementById('dessertSales').value) || 0,
-                beverageSales: parseFloat(document.getElementById('beverageSales').value) || 0,
-                otherSales: parseFloat(document.getElementById('otherSales').value) || 0,
-                notes: document.getElementById('notes').value
-            };
+        // Setup autocomplete
+        function setupAutocomplete() {
+            const searchInput = document.getElementById('menuSearch');
+            const autocompleteList = document.getElementById('autocompleteList');
 
-            entry.totalExpenses = entry.foodExpenses + entry.dessertExpenses + entry.beverageExpenses + entry.otherExpenses;
-            entry.totalSales = entry.foodSales + entry.dessertSales + entry.beverageSales + entry.otherSales;
-            entry.profit = entry.totalSales - entry.totalExpenses;
-            entry.marginPercent = entry.totalSales > 0 ? ((entry.profit / entry.totalSales) * 100).toFixed(2) : 0;
+            searchInput.addEventListener('input', function() {
+                const value = this.value.toLowerCase();
+                autocompleteList.innerHTML = '';
 
-            entries.push(entry);
-            saveToLocalStorage();
-            updateDashboard();
-            clearForm();
+                if (value.length < 1) {
+                    autocompleteList.classList.remove('active');
+                    return;
+                }
 
-            const msg = document.getElementById('successMessage');
-            msg.classList.add('show');
-            setTimeout(() => msg.classList.remove('show'), 3000);
+                const filtered = menuItems.filter(item =>
+                    item.name.toLowerCase().includes(value)
+                );
+
+                if (filtered.length === 0) {
+                    autocompleteList.classList.remove('active');
+                    return;
+                }
+
+                filtered.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'autocomplete-item';
+                    div.textContent = `${item.name} - $${item.price.toFixed(2)}`;
+                    div.onclick = () => selectMenuItem(item);
+                    autocompleteList.appendChild(div);
+                });
+
+                autocompleteList.classList.add('active');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (e.target !== searchInput) {
+                    autocompleteList.classList.remove('active');
+                }
+            });
         }
 
-        function deleteEntry(index) {
-            if (confirm('Delete this entry?')) {
-                entries.splice(index, 1);
-                saveToLocalStorage();
-                updateDashboard();
+        // Select menu item
+        function selectMenuItem(item) {
+            document.getElementById('menuSearch').value = item.name;
+            document.getElementById('itemCategory').value = item.category;
+            document.getElementById('itemPrice').value = '$' + item.price.toFixed(2);
+            document.getElementById('itemQuantity').value = 1;
+            document.getElementById('autocompleteList').classList.remove('active');
+        }
+
+        // Add order
+        function addOrder() {
+            const itemName = document.getElementById('menuSearch').value;
+            const category = document.getElementById('itemCategory').value;
+            const priceStr = document.getElementById('itemPrice').value.replace('$', '');
+            const price = parseFloat(priceStr) || 0;
+            const quantity = parseInt(document.getElementById('itemQuantity').value) || 1;
+
+            if (!itemName || !category || price === 0) {
+                alert('Please select a valid menu item');
+                return;
             }
+
+            const amount = price * quantity;
+            const date = document.getElementById('entryDate').value;
+
+            // Add to sales based on category
+            if (category === 'Dessert') {
+                dailyData.dessertSales += amount;
+            } else if (category === 'Food') {
+                dailyData.foodSales += amount;
+            } else if (category === 'Beverage') {
+                dailyData.beverageSales += amount;
+            }
+
+            // Add entry
+            dailyData.entries.push({
+                date: date,
+                type: 'Sale',
+                category: category,
+                description: `${itemName} x${quantity}`,
+                amount: amount
+            });
+
+            clearOrderForm();
+            updateDisplay();
+            saveData();
         }
 
-        function updateDashboard() {
-            updateSummary();
+        // Add expense
+        function addExpense() {
+            const category = document.getElementById('expenseCategory').value;
+            const amount = parseFloat(document.getElementById('expenseAmount').value) || 0;
+            const description = document.getElementById('expenseDescription').value;
+
+            if (!category || amount === 0) {
+                alert('Please select category and enter amount');
+                return;
+            }
+
+            const date = document.getElementById('entryDate').value;
+
+            // Add to expenses based on category
+            if (category === 'Dessert Expense') {
+                dailyData.dessertExpenses += amount;
+            } else if (category === 'Food Expense') {
+                dailyData.foodExpenses += amount;
+            } else if (category === 'Beverage Expense') {
+                dailyData.beverageExpenses += amount;
+            } else if (category === 'Salary') {
+                dailyData.salaries += amount;
+            } else if (category === 'Other Expense') {
+                dailyData.otherExpenses += amount;
+            }
+
+            // Add entry
+            dailyData.entries.push({
+                date: date,
+                type: 'Expense',
+                category: category,
+                description: description || 'Expense',
+                amount: amount
+            });
+
+            clearExpenseForm();
+            updateDisplay();
+            saveData();
+        }
+
+        // Clear order form
+        function clearOrderForm() {
+            document.getElementById('menuSearch').value = '';
+            document.getElementById('itemCategory').value = '';
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('itemQuantity').value = '1';
+        }
+
+        // Clear expense form
+        function clearExpenseForm() {
+            document.getElementById('expenseCategory').value = '';
+            document.getElementById('expenseAmount').value = '';
+            document.getElementById('expenseDescription').value = '';
+        }
+
+        // Update display - STRICT KPI ORDERING
+        function updateDisplay() {
+            // Sales KPIs (in strict order)
+            document.getElementById('dessertSales').textContent = dailyData.dessertSales.toFixed(2);
+            document.getElementById('foodSales').textContent = dailyData.foodSales.toFixed(2);
+            document.getElementById('beverageSales').textContent = dailyData.beverageSales.toFixed(2);
+
+            const totalSales = dailyData.dessertSales + dailyData.foodSales + dailyData.beverageSales;
+            document.getElementById('totalSales').textContent = totalSales.toFixed(2);
+
+            // Expenses KPIs (in strict order)
+            document.getElementById('dessertExpenses').textContent = dailyData.dessertExpenses.toFixed(2);
+            document.getElementById('foodExpenses').textContent = dailyData.foodExpenses.toFixed(2);
+            document.getElementById('beverageExpenses').textContent = dailyData.beverageExpenses.toFixed(2);
+            document.getElementById('salaries').textContent = dailyData.salaries.toFixed(2);
+            document.getElementById('otherExpenses').textContent = dailyData.otherExpenses.toFixed(2);
+
+            const totalExpenses = dailyData.dessertExpenses + dailyData.foodExpenses + dailyData.beverageExpenses + dailyData.salaries + dailyData.otherExpenses;
+            document.getElementById('totalExpenses').textContent = totalExpenses.toFixed(2);
+
+            // Daily Net Profit/Loss
+            const dailyProfit = totalSales - totalExpenses;
+            document.getElementById('dailyProfit').textContent = Math.abs(dailyProfit).toFixed(2);
+
+            const profitCard = document.getElementById('profitCard');
+            if (dailyProfit >= 0) {
+                profitCard.className = 'kpi-card profit';
+            } else {
+                profitCard.className = 'kpi-card loss';
+            }
+
+            // Update table
             updateTable();
-            updateCharts();
         }
 
-        function updateSummary() {
-            if (entries.length === 0) {
-                document.getElementById('totalExpensesToday').textContent = '$0.00';
-                document.getElementById('totalSalesToday').textContent = '$0.00';
-                document.getElementById('profitToday').textContent = '$0.00';
-                document.getElementById('marginToday').textContent = '0%';
-                return;
-            }
-
-            const today = new Date().toISOString().split('T')[0];
-            const todayEntry = entries.find(e => e.date === today);
-
-            if (todayEntry) {
-                document.getElementById('totalExpensesToday').textContent = '$' + todayEntry.totalExpenses.toFixed(2);
-                document.getElementById('totalSalesToday').textContent = '$' + todayEntry.totalSales.toFixed(2);
-                document.getElementById('profitToday').textContent = '$' + todayEntry.profit.toFixed(2);
-                document.getElementById('marginToday').textContent = todayEntry.marginPercent + '%';
-            }
-        }
-
+        // Update summary table
         function updateTable() {
-            const container = document.getElementById('dataTableContainer');
+            const table = document.getElementById('summaryTable');
 
-            if (entries.length === 0) {
-                container.innerHTML = '<div class="no-data">No entries yet. Add your first daily record!</div>';
+            if (dailyData.entries.length === 0) {
+                table.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">No entries yet</td></tr>';
                 return;
             }
 
-            let html = `<table class="data-table"><thead><tr><th>Date</th><th>Day</th><th>Food Exp</th><th>Dessert Exp</th><th>Total Exp</th><th>Food Sales</th><th>Dessert Sales</th><th>Total Sales</th><th>Profit</th><th>Margin</th><th>Action</th></tr></thead><tbody>`;
-
-            entries.forEach((entry, index) => {
-                html += `<tr><td>${entry.date}</td><td>${entry.day}</td><td>$${entry.foodExpenses.toFixed(2)}</td><td>$${entry.dessertExpenses.toFixed(2)}</td><td>$${entry.totalExpenses.toFixed(2)}</td><td>$${entry.foodSales.toFixed(2)}</td><td>$${entry.dessertSales.toFixed(2)}</td><td>$${entry.totalSales.toFixed(2)}</td><td style="color: #28a745; font-weight: bold;">$${entry.profit.toFixed(2)}</td><td>${entry.marginPercent}%</td><td><button class="delete-btn" onclick="deleteEntry(${index})">Delete</button></td></tr>`;
-            });
-
-            html += '</tbody></table>';
-            container.innerHTML = html;
+            table.innerHTML = dailyData.entries.map((entry, index) => `
+                <tr>
+                    <td>${entry.date}</td>
+                    <td>${entry.type}</td>
+                    <td>${entry.category}</td>
+                    <td>${entry.description}</td>
+                    <td class="text-right">$${entry.amount.toFixed(2)}</td>
+                    <td class="text-right">
+                        <button class="delete-btn" onclick="deleteEntry(${index})">🗑️ Delete</button>
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        function initCharts() {
-            const ctx1 = document.getElementById('salesChart').getContext('2d');
-            salesChart = new Chart(ctx1, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Food', 'Dessert', 'Beverage', 'Other'],
-                    datasets: [{
-                        data: [0, 0, 0, 0],
-                        backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe'],
-                        borderColor: '#fff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom' } }
+        // Delete entry
+        function deleteEntry(index) {
+            const entry = dailyData.entries[index];
+
+            // Subtract from totals
+            if (entry.type === 'Sale') {
+                if (entry.category === 'Dessert') {
+                    dailyData.dessertSales -= entry.amount;
+                } else if (entry.category === 'Food') {
+                    dailyData.foodSales -= entry.amount;
+                } else if (entry.category === 'Beverage') {
+                    dailyData.beverageSales -= entry.amount;
                 }
-            });
-
-            const ctx2 = document.getElementById('expenseChart').getContext('2d');
-            expenseChart = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Food Exp',
-                        data: [],
-                        backgroundColor: '#667eea'
-                    }, {
-                        label: 'Dessert Exp',
-                        data: [],
-                        backgroundColor: '#764ba2'
-                    }, {
-                        label: 'Beverage Exp',
-                        data: [],
-                        backgroundColor: '#f093fb'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true } }
+            } else if (entry.type === 'Expense') {
+                if (entry.category === 'Dessert Expense') {
+                    dailyData.dessertExpenses -= entry.amount;
+                } else if (entry.category === 'Food Expense') {
+                    dailyData.foodExpenses -= entry.amount;
+                } else if (entry.category === 'Beverage Expense') {
+                    dailyData.beverageExpenses -= entry.amount;
+                } else if (entry.category === 'Salary') {
+                    dailyData.salaries -= entry.amount;
+                } else if (entry.category === 'Other Expense') {
+                    dailyData.otherExpenses -= entry.amount;
                 }
-            });
-
-            const ctx3 = document.getElementById('profitChart').getContext('2d');
-            profitChart = new Chart(ctx3, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Daily Profit',
-                        data: [],
-                        borderColor: '#28a745',
-                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#28a745'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true } }
-                }
-            });
-        }
-
-        function updateCharts() {
-            if (entries.length === 0) return;
-
-            const totalFoodSales = entries.reduce((sum, e) => sum + e.foodSales, 0);
-            const totalDessertSales = entries.reduce((sum, e) => sum + e.dessertSales, 0);
-            const totalBeverageSales = entries.reduce((sum, e) => sum + e.beverageSales, 0);
-            const totalOtherSales = entries.reduce((sum, e) => sum + e.otherSales, 0);
-
-            salesChart.data.datasets[0].data = [totalFoodSales, totalDessertSales, totalBeverageSales, totalOtherSales];
-            salesChart.update();
-
-            const last7 = entries.slice(-7);
-            expenseChart.data.labels = last7.map(e => e.date);
-            expenseChart.data.datasets[0].data = last7.map(e => e.foodExpenses);
-            expenseChart.data.datasets[1].data = last7.map(e => e.dessertExpenses);
-            expenseChart.data.datasets[2].data = last7.map(e => e.beverageExpenses);
-            expenseChart.update();
-
-            profitChart.data.labels = entries.map(e => e.date);
-            profitChart.data.datasets[0].data = entries.map(e => e.profit);
-            profitChart.update();
-        }
-
-        function clearForm() {
-            document.getElementById('foodExpenses').value = '';
-            document.getElementById('dessertExpenses').value = '';
-            document.getElementById('beverageExpenses').value = '';
-            document.getElementById('otherExpenses').value = '';
-            document.getElementById('foodSales').value = '';
-            document.getElementById('dessertSales').value = '';
-            document.getElementById('beverageSales').value = '';
-            document.getElementById('otherSales').value = '';
-            document.getElementById('notes').value = '';
-        }
-
-        function saveToLocalStorage() {
-            localStorage.setItem('feekaCafeData', JSON.stringify(entries));
-        }
-
-        function loadFromLocalStorage() {
-            const data = localStorage.getItem('feekaCafeData');
-            if (data) {
-                entries = JSON.parse(data);
-                updateDashboard();
-            }
-        }
-
-        function exportToCSV() {
-            if (entries.length === 0) {
-                alert('No data to export!');
-                return;
             }
 
-            let csv = 'Date,Day,Food Exp,Dessert Exp,Total Exp,Food Sales,Dessert Sales,Total Sales,Profit,Margin %\n';
-            entries.forEach(e => {
-                csv += `${e.date},${e.day},${e.foodExpenses},${e.dessertExpenses},${e.totalExpenses},${e.foodSales},${e.dessertSales},${e.totalSales},${e.profit},${e.marginPercent}\n`;
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Feeka_Cafe_Finance_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
+            dailyData.entries.splice(index, 1);
+            updateDisplay();
+            saveData();
         }
 
-        function exportToExcel() {
-            if (entries.length === 0) {
-                alert('No data to export!');
-                return;
-            }
-
-            const data = entries.map(e => ({
-                'Date': e.date,
-                'Day': e.day,
-                'Food Exp': e.foodExpenses,
-                'Dessert Exp': e.dessertExpenses,
-                'Total Exp': e.totalExpenses,
-                'Food Sales': e.foodSales,
-                'Dessert Sales': e.dessertSales,
-                'Total Sales': e.totalSales,
-                'Profit': e.profit,
-                'Margin %': e.marginPercent
-            }));
-
-            const ws = XLSX.utils.json_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Finance');
-            XLSX.writeFile(wb, `Feeka_Cafe_Finance_${new Date().toISOString().split('T')[0]}.xlsx`);
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('feekaData', JSON.stringify(dailyData));
         }
 
-        function clearAllData() {
-            if (confirm('Delete all data? Cannot undo!')) {
-                entries = [];
-                saveToLocalStorage();
-                updateDashboard();
-                alert('All data cleared!');
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('feekaData');
+            if (saved) {
+                dailyData = JSON.parse(saved);
+                updateDisplay();
             }
         }
     </script>
