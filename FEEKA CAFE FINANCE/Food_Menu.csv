@@ -1,0 +1,37 @@
+Item,Category,Price (USD),Cost Price (USD)
+Espresso,Coffee,2.50,0.75
+Cappuccino,Coffee,3.50,1.00
+Latte,Coffee,3.75,1.10
+Americano,Coffee,2.75,0.80
+Macchiato,Coffee,3.25,0.95
+Mocha,Coffee,4.00,1.25
+Flat White,Coffee,3.75,1.10
+Cold Brew,Coffee,3.00,0.85
+Iced Coffee,Coffee,3.25,0.90
+Chocolate Croissant,Pastry,3.50,1.20
+Almond Croissant,Pastry,4.00,1.40
+Pain au Chocolat,Pastry,3.25,1.10
+Blueberry Muffin,Pastry,3.75,1.30
+Chocolate Chip Cookie,Dessert,2.50,0.70
+Carrot Cake Slice,Dessert,4.50,1.50
+Cheesecake Slice,Dessert,5.00,1.70
+Tiramisu,Dessert,5.50,1.80
+Brownies,Dessert,3.50,1.00
+Macarons (3pc),Dessert,4.50,1.20
+Chocolate Mousse,Dessert,4.00,1.30
+Vanilla Cupcake,Dessert,3.00,0.90
+Chocolate Cupcake,Dessert,3.00,0.90
+Fruit Tart,Dessert,5.00,1.60
+Lemon Meringue Pie,Dessert,4.75,1.55
+Caesar Salad,Food,8.50,3.00
+Grilled Cheese Sandwich,Food,7.00,2.50
+Chicken Panini,Food,9.00,3.50
+Turkey Wrap,Food,8.00,2.80
+Veggie Burger,Food,8.50,3.00
+Quiche Lorraine,Food,7.50,2.80
+Pasta Carbonara,Food,10.50,4.00
+Margherita Pizza Slice,Food,5.50,1.80
+Tomato Soup,Food,6.00,2.00
+Iced Tea,Beverage,2.50,0.60
+Bottled Water,Beverage,1.50,0.30
+Fresh Orange Juice,Beverage,3.50,1.20
