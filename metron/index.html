@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metron Middle East - General Trading Company</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-text">Metron</span>
+                </div>
+                <nav class="nav">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#products" class="nav-link">Products</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                    <a href="#contact" class="nav-link">Contact Us</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Excellence in Trading Solutions</h1>
+                <p class="hero-subtitle">Delivering premium products and exceptional services across the Middle East</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">
+                        Explore Products
+                    </button>
+                    <button class="btn btn-secondary" onclick="toggleAbout()">
+                        About Us
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section (Hidden by default) -->
+    <section class="about-section" id="about-dropdown" style="display: none;">
+        <div class="container">
+            <div class="about-content">
+                <h2>About Metron</h2>
+                <p>Metron Middle East General Trading Company is a leading provider of premium products and services, specializing in furniture, lighting, floor coverings, and decorative solutions. With extensive experience and a portfolio of prestigious projects across the region, we deliver excellence in every endeavor.</p>
+                <p>Our commitment to quality, innovation, and customer satisfaction sets us apart in the industry.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Our Products</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-icon">🛋️</div>
+                    <h3>Furniture</h3>
+                    <p>Indoor, outdoor, and office furniture solutions</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">💡</div>
+                    <h3>Lighting</h3>
+                    <p>Premium lighting fixtures and solutions</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">📐</div>
+                    <h3>Floor Coverings</h3>
+                    <p>Wood, carpets, and premium rugs</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">🎨</div>
+                    <h3>Decoratives</h3>
+                    <p>Wallpapers and decorative elements</p>
+                </div>
+            </div>
+            <div class="products-cta">
+                <button class="btn btn-primary" onclick="scrollToProjects()">Explore Our Major Projects</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2 class="section-title">Explore Our Major Projects</h2>
+
+            <!-- Project Filters -->
+            <div class="project-filters">
+                <button class="filter-btn active" onclick="filterProjects('all')">All Projects</button>
+                <button class="filter-btn" onclick="filterProjects('dubai')">Dubai</button>
+                <button class="filter-btn" onclick="filterProjects('abudhabi')">Abu Dhabi</button>
+                <button class="filter-btn" onclick="filterProjects('greece')">Greece</button>
+                <button class="filter-btn" onclick="filterProjects('london')">London</button>
+                <button class="filter-btn" onclick="filterProjects('bahrain')">Bahrain</button>
+                <button class="filter-btn" onclick="filterProjects('romania')">Romania</button>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="projects-grid">
+                <!-- Abu Dhabi Projects -->
+                <div class="project-card" data-category="abudhabi">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Sapia+Al+Ain+Zoo" alt="Sapia Al Ain Zoo">
+                    </div>
+                    <div class="project-info">
+                        <h3>Sapia Al Ain Zoo</h3>
+                        <p>Ticketing office and management office, Majlis furnitures</p>
+                        <button class="btn btn-small" onclick="openGallery('sapia')">View Gallery</button>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="abudhabi">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Hilalco+Abu+Dhabi" alt="Hilalco Abu Dhabi">
+                    </div>
+                    <div class="project-info">
+                        <h3>Hilalco Abu Dhabi</h3>
+                        <p>Head office furnitures</p>
+                        <button class="btn btn-small" onclick="openGallery('hilalco')">View Gallery</button>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="abudhabi">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Qasr+Al+Watan" alt="Qasr Al Watan">
+                    </div>
+                    <div class="project-info">
+                        <h3>Qasr Al Watan</h3>
+                        <p>Floor coverings in Abu Dhabi</p>
+                        <button class="btn btn-small" onclick="openGallery('qasr')">View Gallery</button>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="abudhabi">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Velodrome+Modern" alt="Velodrome Modern">
+                    </div>
+                    <div class="project-info">
+                        <h3>Velodrome Modern</h3>
+                        <p>Modern office furnitures in Abu Dhabi</p>
+                        <button class="btn btn-small" onclick="openGallery('velodrome')">View Gallery</button>
+                    </div>
+                </div>
+
+                <!-- Dubai Projects -->
+                <div class="project-card" data-category="dubai">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Opera+Back+House" alt="Opera Back House">
+                    </div>
+                    <div class="project-info">
+                        <h3>Opera Back House</h3>
+                        <p>Locker, multifunctions partitions in Dubai</p>
+                        <button class="btn btn-small" onclick="openGallery('opera')">View Gallery</button>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="dubai">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Burj+Vista" alt="Burj Vista">
+                    </div>
+                    <div class="project-info">
+                        <h3>Burj Vista</h3>
+                        <p>Kitchen cabinets, wardrobe cabinets, bathroom furnitures in Dubai</p>
+                        <button class="btn btn-small" onclick="openGallery('burj')">View Gallery</button>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="dubai">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Wade+Adams+Dubai" alt="Wade Adams Dubai">
+                    </div>
+                    <div class="project-info">
+                        <h3>Wade Adams Dubai</h3>
+                        <p>Site office furnitures</p>
+                        <button class="btn btn-small" onclick="openGallery('wade')">View Gallery</button>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="dubai">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Modon+Abu+Dhabi" alt="Modon Abu Dhabi">
+                    </div>
+                    <div class="project-info">
+                        <h3>Modon Abu Dhabi</h3>
+                        <p>Riyad City and Shakhbout City site office furnitures</p>
+                        <button class="btn btn-small" onclick="openGallery('modon')">View Gallery</button>
+                    </div>
+                </div>
+
+                <!-- London Projects -->
+                <div class="project-card" data-category="london">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=8th+Broadway+London" alt="8th Broadway London">
+                    </div>
+                    <div class="project-info">
+                        <h3>8th Broadway London</h3>
+                        <p>Restaurant furnitures</p>
+                        <button class="btn btn-small" onclick="openGallery('broadway')">View Gallery</button>
+                    </div>
+                </div>
+
+                <!-- Greece Projects -->
+                <div class="project-card" data-category="greece">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Santanna+Enorme+Island" alt="Santanna Enorme Island">
+                    </div>
+                    <div class="project-info">
+                        <h3>Santanna Enorme Island Hotel</h3>
+                        <p>Hotel project in Greece</p>
+                        <button class="btn btn-small" onclick="openGallery('santanna-island')">View Gallery</button>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="greece">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Santanna+Beach+Resort" alt="Santanna Beach Resort">
+                    </div>
+                    <div class="project-info">
+                        <h3>Santanna Enorme Beach Resort</h3>
+                        <p>Beach resort project in Greece</p>
+                        <button class="btn btn-small" onclick="openGallery('santanna-beach')">View Gallery</button>
+                    </div>
+                </div>
+
+                <!-- Bahrain Projects -->
+                <div class="project-card" data-category="bahrain">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/400x300?text=Ritz+Carlton+Bahrain" alt="Ritz Carlton Bahrain">
+                    </div>
+                    <div class="project-info">
+                        <h3>Ritz Carlton Bahrain</h3>
+                        <p>Luxury hotel project</p>
+                        <button class="btn btn-small" onclick="openGallery('ritz-bahrain')">View Gallery</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Gallery Modal -->
+    <div id="galleryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeGallery()">&times;</span>
+            <div class="gallery-container">
+                <img id="galleryImage" src="" alt="Project image" class="gallery-image">
+                <div class="gallery-controls">
+                    <button class="gallery-btn" onclick="previousImage()">❮ Previous</button>
+                    <button class="gallery-btn" onclick="nextImage()">Next ❯</button>
+                </div>
+                <p id="imageCaption" class="image-caption"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <div class="contact-detail">
+                        <p><strong>Telephone:</strong></p>
+                        <p>+971 267 27888</p>
+                        <p>+971 52-906-4207</p>
+                    </div>
+                    <div class="contact-detail">
+                        <p><strong>Address:</strong></p>
+                        <p>C-88 Building, Tower A, 102<br>
+                        Electra Street, Behind City Seasons Hotel<br>
+                        Abu Dhabi, United Arab Emirates</p>
+                    </div>
+                    <div class="contact-detail">
+                        <p><strong>Email:</strong></p>
+                        <p><a href="mailto:info@metron.ae">info@metron.ae</a></p>
+                        <p><a href="mailto:stavros@metron.ae">stavros@metron.ae</a></p>
+                    </div>
+                </div>
+                <div class="whatsapp-button">
+                    <a href="https://wa.me/971509064207" target="_blank" class="whatsapp-icon" title="Contact us on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.782 1.146l-.313.156-3.582.361 .363 3.591.102.324a9.858 9.858 0 001.468 4.513c1.5 2.295 3.708 3.714 5.984 3.714h.006c2.329 0 4.542-1.217 5.933-3.375.485-.72.9-1.554 1.185-2.462a9.99 9.99 0 00.526-3.29v-.532a10.025 10.025 0 00-3.052-7.168 10.025 10.025 0 00-7.042-2.913"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Metron Middle East General Trading Company. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
